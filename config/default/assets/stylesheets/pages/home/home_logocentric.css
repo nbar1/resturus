@@ -1,0 +1,11 @@
+#content {
+	height: auto;
+	margin-top: 30px;
+	padding: 0;
+}
+/* PHONE */
+@media (max-width: 767px) {
+	#content {
+		margin-top: 20px;
+	}
+}
