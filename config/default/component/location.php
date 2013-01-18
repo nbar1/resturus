@@ -8,7 +8,7 @@ $component_config = array(
 				'assets/stylesheets/components/location/location.css',
 			),
 		),
-		'class' => 'test_location_class',
+		'class' => 'hp_component',
 		'columns' => 4,
 	),
 );

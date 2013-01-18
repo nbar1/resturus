@@ -1,4 +1,8 @@
 #content {
+	background: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 	height: auto;
 	margin-top: 30px;
 	padding: 0;

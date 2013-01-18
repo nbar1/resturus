@@ -1,4 +1,7 @@
 #content .hp_component.slider-wrapper {
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
 	margin-top: 0;
 	padding: 0;
 }
