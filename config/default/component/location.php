@@ -9,6 +9,7 @@ $component_config = array(
 			),
 		),
 		'class' => 'test_location_class',
+		'columns' => 4,
 	),
 );
 ?>

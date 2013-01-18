@@ -34,6 +34,8 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		$template = $this->parseToken($template, "token://pageNav", $this->getPageNav());
 		$template = $this->parseToken($template, "token://mobileNav", $this->getPageNavMobile());
 
+		$template = $this->buildComponentWrapper($template, $config);
+
 		return array(array($this->javascripts, $this->stylesheets), $template);
 	}
 

@@ -46,6 +46,8 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$template = $this->parseToken($template, "token://location_city", $this->getLocationCity());
 		$template = $this->parseToken($template, "token://location_state", $this->getLocationState());
 		$template = $this->parseToken($template, "token://location_zip", $this->getLocationZip());
+		
+		$template = $this->buildComponentWrapper($template, $config);
 
 		return array(array($this->javascripts, $this->stylesheets), $template);
 	}

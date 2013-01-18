@@ -6,6 +6,8 @@ $assets = array(
 	'javascripts' => array(),
 	'stylesheets' => array(),
 );
+$columns_at = 1;
+$columns_max = 12;
 
 
 define('INCLUDES','brdi/includes/');
