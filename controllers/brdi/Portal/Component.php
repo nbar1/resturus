@@ -1,7 +1,20 @@
 <?php
-
+/**
+ * brdi_Portal_Component
+ *
+ * @author Nick Barone
+ * @copyright Copyright (c) Resturus, 2013
+ */
 class brdi_Portal_Component extends brdi_Portal
 {
+	/**
+	 * getComponentTemplate
+	 *
+	 * Gets the component specific template
+	 *
+	 * @param Array $config Component configuration
+	 * @return String Component template
+	 */
 	public function getComponentTemplate($config)
 	{
 		try
@@ -10,24 +23,29 @@ class brdi_Portal_Component extends brdi_Portal
 			{
 				$template = $config[1]['template'];
 			}
-			$page = $this->getPagePath();
-			if(!$page) $page = "404";
 			$template = (!$config[1]['template'])?$config[0]:$config[1]['template'];
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
+			$template_path = $template;
 			$template = file_get_contents($template);
 		}
 		catch(Exception $e)
 		{
-			$template = $this->getConfigOverride("assets/templates/error/view.php");
+			$template = $this->getConfigOverride("assets/templates/component/error/view.php");
 		}
+		// parse component class
 		$template = $this->parseToken($template, "token://component_class", $config[1]['config']['class']);
+		// parse component template name
+		$template = $this->parseToken($template, "token://template_name", $template_path);
 		return $template;
 	}
-	
+
 	/**
 	 * setAllComponentJavascripts
 	 *
 	 * Sets up all the js files from the component config
+	 *
+	 * @param Array $config Component configuration
+	 * @return bool
 	 */
 	public function setAllComponentJavascripts($config)
 	{
@@ -37,11 +55,14 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		return true;
 	}
-	
+
 	/**
 	 * setAllComponentStylesheets
 	 *
 	 * Sets up all the css files from the component config
+	 *
+	 * @param Array $config Component configuration
+	 * @return bool
 	 */
 	public function setAllComponentStylesheets($config)
 	{
@@ -51,8 +72,10 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		return true;
 	}
-	
-	
+
+	/**
+	 * deprecated
+	 */
 	public function buildComponents($config)
 	{
 		// example config

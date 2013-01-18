@@ -12,6 +12,7 @@ $component_config = array(
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/slider/nivo-slider.css',
+				'assets/stylesheets/components/slider/slider.css',
 			),
 			'javascripts' => array(
 				'assets/javascripts/components/slider/jquery.nivo.slider.pack.js',

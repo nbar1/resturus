@@ -1,57 +1,88 @@
 <?php
+/**
+ * brdi_Portal
+ *
+ * @author Nick Barone
+ * @copyright Copyright (c) Resturus, 2013
+ */
 class brdi_Portal extends brdi
 {
-
 	/**
 	 * getFileOverrides
+	 *
+	 * Checks for a client level override on config files
+	 *
+	 * @param String $path Path of config file
+	 * @return String file path
 	 */
 	public function getConfigOverride($path)
 	{
 		if(!$path) return false;
+		// check for client level override
 		if(file_exists(CONFIG.$this->getClientToken()."/".$path))
 		{
 			return CONFIG.$this->getClientToken()."/".$path;
 		}
+		// check for default file
 		elseif(file_exists(CONFIG."default/".$path))
 		{
 			return CONFIG."default/".$path;
 		}
+		// file not found
 		else
 		{
 			return false;
 		}
 	}
 
+	/**
+	 * tokenize
+	 *
+	 * Performs token replacement
+	 *
+	 * @param Array $config Configuration for current page
+	 * @return String Html of page to display
+	 */
 	public function tokenize($config)
 	{
 		global $assets;
-		/**
-		 * config Array()
-		 *
-		 * wrapper
-		 * template
-		 * components Array()
-		 ** Array()
-		 *** 
-		 *
-		 *
-		 */
-		 $content = $config['wrapper'];
-		 $content = $this->parseToken($content, "template://internal", $config['template']);
-		 $content = $this->parseAllComponents($content);
-		 $content = $this->parseToken($content, "asset://stylesheets", $this->getAllStylesheets());
-		 $content = $this->parseToken($content, "asset://javascripts", $this->getAllJavascripts());
-		 $content = $this->parseToken($content, "token://page", $config['pageid']);
-		 
-		 return $content;
-		 
+		$content = $config['wrapper'];
+		// parse page template
+		$content = $this->parseToken($content, "template://internal", $config['template']);
+		// parse all compnents on page
+		$content = $this->parseAllComponents($content);
+		// parse assets
+		$content = $this->parseToken($content, "asset://stylesheets", $this->getAllStylesheets());
+		$content = $this->parseToken($content, "asset://javascripts", $this->getAllJavascripts());
+		// parse page id
+		$content = $this->parseToken($content, "token://page", $config['pageid']);
+
+		return $content;
 	}
 
+	/**
+	 * parseToken
+	 *
+	 * Parses a given token against a given value
+	 *
+	 * @param String $data String with given token, raw data
+	 * @param String $token Token to replace
+	 * @param String $replace String to replace token with
+	 * @return String Complete data
+	 */
 	public function parseToken($data, $token, $replace)
 	{
 		return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data);
 	}
 
+	/**
+	 * parseAllComponents
+	 *
+	 * Parse all components in the given template
+	 *
+	 * @param String $content Template with components
+	 * @return String Template with components included
+	 */
 	private function parseAllComponents($content)
 	{
 		preg_match_all("|\!\{component\://(\w+)\}|", $content, $components);
@@ -60,76 +91,124 @@ class brdi_Portal extends brdi
 			// get $component_config
 			$config = $this->getConfigOverride("component/".strtolower($component).".php");
 			include($config);
+
 			if($component_config)
 			{
 				// build component class
 				$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
 				$comp_builder = new $comp_class();
-
+				// run build function
 				$component_return = $comp_builder->build(array($component, $component_config));
-
+				//set component variables
 				$component_html = $component_return[1];
 				$component_assets = $component_return[0];
+				//parse token against given content
 				$content = $this->parseToken($content, "component://".$component, $component_html);
 			}
 		}
 		return $content;
 	}
-	
-	
-	
+
+	/**
+	 * addJavascript
+	 *
+	 * Adds given javascript to $assets['javascripts']
+	 *
+	 * @param String $javascript File path to javascript file to load on page
+	 * @return bool
+	 */
 	public function addJavascript($javascript)
 	{
 		global $assets;
+		// check if file is local or remote
 		if(substr($javascript, 0, 4) == 'http')
 		{
+			// add remote file
 			array_push($assets['javascripts'], $javascript);
 		}
 		else {
+			// add local file
 			$js = $this->getConfigOverride($javascript);
 			if($js) array_push($assets['javascripts'], $this->getConfigOverride($javascript));
 		}
 		return true;
 	}
-	
+
+	/**
+	 * addStylesheet
+	 *
+	 * Adds given stylesheet to $assets['stylesheets']
+	 *
+	 * @param String $stylesheet File path to stylesheet file to load on page
+	 * @return bool
+	 */
 	public function addStylesheet($stylesheet)
 	{
 		global $assets;
+		// check if file is locale or remote
 		if(substr($stylesheet, 0, 4) == 'http')
 		{
+			// add remote file
 			array_push($assets['stylesheets'], $stylesheet);
 		}
 		else {
+			// add local file
 			$css = $this->getConfigOverride($stylesheet);
 			if($css) array_push($assets['stylesheets'], $this->getConfigOverride($stylesheet));
 		}
 		return true;
 	}
-	
+
+	/**
+	 * getAllJavascripts
+	 *
+	 * Get html for javascripts
+	 *
+	 * @return String Html formatted string of javascripts
+	 *
+	 */
 	private function getAllJavascripts()
 	{
 		global $assets;
+		// get all javascripts to include
+		$javascripts = array_unique($assets['javascripts']);
 		$html = "";
-		foreach($assets['javascripts'] as $js)
+		foreach($javascripts as $js)
 		{
+			// parse javascript as html
 			$html .= "<script type=\"text/javascript\" src=\"/".$js."\"></script>";
 		}
 		return $html;
 	}
-	
+
+	/**
+	 * getAllStylesheets
+	 *
+	 * Get html for stylesheets
+	 *
+	 * @return String Html formatted string of stylesheets
+	 *
+	 */
 	private function getAllStylesheets()
 	{
 		global $assets;
+		// get all stylesheets to include
+		$stylesheets = array_unique($assets['stylesheets']);
 		$html = "";
-		foreach($assets['stylesheets'] as $css)
+		foreach($stylesheets as $css)
 		{
+			// parse stylesheet as html
 			$html .= "<link rel=\"stylesheet\" href=\"/".$css."\" />";
 		}
 		return $html;
 	}
-	
+
 	/**
 	 * getPagePath
+	 *
+	 * Get page path
+	 *
+	 * @return String Page path
 	 */
 	public function getPagePath()
 	{
@@ -144,7 +223,7 @@ class brdi_Portal extends brdi
 
 		return $page;
 	}
-	
+
 	/**
 	 * getPageHref
 	 *
@@ -166,7 +245,7 @@ class brdi_Portal extends brdi
 	 */
 	public function isThisPage($config_page)
 	{
-		if($this->getPageHref() == strtolower(str_replace("/","",$config_page))) return true;
+		if(strtolower(str_replace("/","",$this->request)) == strtolower(str_replace("/","",$config_page))) return true;
 		else return false;
 	}
 
@@ -188,7 +267,5 @@ class brdi_Portal extends brdi
 		if(!$parent) $parent = "homepage";
 		return $parent;
 	}
-	
-	
 }
 ?>

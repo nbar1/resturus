@@ -1,15 +1,32 @@
 <?php
+/**
+ * brdi_Portal_Component_Nav
+ *
+ * @author Nick Barone
+ * @copyright Copyright (c) Resturus, 2013
+ */
 class brdi_Portal_Component_Nav extends brdi_Portal_Component
 {
 	public $nav;
 	public $config;
 	public $type;
 
+	/**
+	 * build
+	 *
+	 * Builds component and returns data for Portal to render it
+	 *
+	 * @param Array $config Component configuration
+	 * @return Array Assets and template for component
+	 */
 	public function build($config)
 	{
-		$this->config = $config[1];
-		$this->nav = $config[1]['nav'];
+		$this->config = $config[1]['config'];
+		$this->nav = $config[1]['config']['nav'];
 		$this->type = $config[0];
+
+		$this->setAllComponentJavascripts($this->config);
+		$this->setAllComponentStylesheets($this->config);
 
 		$template = $this->getComponentTemplate($config);
 
@@ -20,6 +37,13 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		return array(array($this->javascripts, $this->stylesheets), $template);
 	}
 
+	/**
+	 * getPageNav
+	 *
+	 * Returns html formatted nav for Page/Tablet display
+	 *
+	 * @return String Html formatted nav
+	 */
 	private function getPageNav()
 	{
 		$nav_raw = "";
@@ -51,6 +75,13 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		return $nav_raw;
 	}
 
+	/**
+	 * getPageNavMobile
+	 *
+	 * Returns html formatted nav for Mobile display
+	 *
+	 * @return String Html formatted nav
+	 */
 	private function getPageNavMobile()
 	{
 		$nav_raw = "";

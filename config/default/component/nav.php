@@ -1,11 +1,18 @@
 <?php
 $component_config = array(
 	'type' => 'Nav',
-	'nav' => array(
-		'menu',
-		'specials',
-		'locations',
-		'orderonline',
+	'config' => array(
+		'nav' => array(
+			'menu',
+			'specials',
+			'locations',
+			'orderonline',
+		),
+		'assets' => array(
+			'stylesheets' => array(
+				'assets/stylesheets/components/nav/nav.css',
+			),
+		),
 	),
 );
 ?>

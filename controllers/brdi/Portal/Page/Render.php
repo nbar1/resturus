@@ -1,4 +1,10 @@
 <?php
+/**
+ * brdi_Portal_Page_Render
+ *
+ * @author Nick Barone
+ * @copyright Copyright (c) Resturus, 2013
+ */
 class brdi_Portal_Page_Render extends brdi_Portal_Page
 {
 	/**
@@ -56,6 +62,8 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	 * setAllPageJavascripts
 	 *
 	 * Sets up all the js files from the page config
+	 *
+	 * @return bool
 	 */
 	private function setAllPageJavascripts()
 	{
@@ -72,6 +80,8 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	 * setAllPageStylesheets
 	 *
 	 * Sets up all the js files from the page config
+	 *
+	 * @return bool
 	 */
 	private function setAllPageStylesheets()
 	{
@@ -85,6 +95,10 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	
 	/**
 	 * displayPage
+	 *
+	 * Gets full page html for inclusion by index.php
+	 *
+	 * @return String Html formatted page
 	 */
 	public function displayPage()
 	{
