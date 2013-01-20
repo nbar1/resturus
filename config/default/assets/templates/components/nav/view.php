@@ -9,13 +9,12 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		</div>
+	</div>
 	<div id="phone_nav" class="nav-collapse collapse visible-phone">
 		<div class="nav_phone ">
 			<ul class="nav">
 				!{token://mobileNav}
 			</ul>
 		</div>
-	</div>
 	</div>
 </div>

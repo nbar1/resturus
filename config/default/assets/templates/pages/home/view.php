@@ -1,2 +1,11 @@
 !{component://homepage_image_slider}
 !{component://location}
+!{component://location}
+!{component://location}
+!{component://location}
+!{component://location}
+!{component://location}
+!{component://location}
+!{component://Nav}
+!{component://location}
+!{component://location}

@@ -70,9 +70,15 @@ class brdi_Portal extends brdi
 	 * @param String $replace String to replace token with
 	 * @return String Complete data
 	 */
-	public function parseToken($data, $token, $replace)
+	public function parseToken($data, $token, $replace, $repeat = true)
 	{
-		return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data);
+		if($repeat)
+		{
+			return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data);
+		}
+		else {
+			return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data, 1);
+		}
 	}
 
 	/**
@@ -103,7 +109,7 @@ class brdi_Portal extends brdi
 				$component_html = $component_return[1];
 				$component_assets = $component_return[0];
 				//parse token against given content
-				$content = $this->parseToken($content, "component://".$component, $component_html);
+				$content = $this->parseToken($content, "component://".$component, $component_html, false);
 			}
 		}
 		return $content;
@@ -214,6 +220,8 @@ class brdi_Portal extends brdi
 	{
 		$page = strtolower(str_replace("/index.php","", $_SERVER['REQUEST_URI']));
 
+		$page = explode("?",$page);
+		$page = $page[0];
 		// if blank, set as homepage
 		if(!$page || $page == "/") $page = "home";
 

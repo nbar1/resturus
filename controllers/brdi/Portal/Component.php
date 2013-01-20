@@ -88,37 +88,43 @@ class brdi_Portal_Component extends brdi_Portal
 		global $columns_at;
 		$wrapper_class = "";
 		$wrapper = "";
-		
+
+		// reset column position if needed
 		if($columns_at > 12) $columns_at = 1;
 
-		$columns = ($config[1]['config']['columns'])?$config[1]['config']['columns']:false;
-		$offset = ($config[1]['config']['offset'])?$config[1]['config']['offset']:false;
+		// get columns and offset
+		$columns = (isset($config[1]['config']['columns']))?$config[1]['config']['columns']:12;
+		$offset = (isset($config[1]['config']['offset']))?$config[1]['config']['offset']:0;
 
-		if($columns !== false)
-		{
-			if($columns < 1) $columns = 1;
-			if($columns > $columns_max) $columns = $columns_max;
-			$wrapper_class .= " span".$columns;
-		}
-		if($offset !== false)
-		{
-			if($offset < 0 || $offset > ($columns_max-1)) $offset = 0;
-			if($offset > 0) $wrapper_class .= " offset".$offset;
-		}
+		// keep columns and offset within range
+		if($columns < 1) $columns = 1;
+		if($columns > $columns_max) $columns = $columns_max;
+		$wrapper_class .= " span".$columns;
+		if($offset < 0 || $offset > ($columns_max-1)) $offset = 0;
+		if($offset > 0) $wrapper_class .= " offset".$offset;
+
 		$wrapper_class = trim($wrapper_class);
-		
-		if(($columns_max - ($columns + $offeset)) < ($columns_at-1))
+
+		//$wrapper .= "<!--CHECK end row because not enough space: {$columns_at} + {$columns} + {$offset} -1 = " . ($columns_at + $columns + $offset - 1) ." gt ". $columns_max." -->";
+
+		if(($columns_at + $columns + $offset - 1) > $columns_max)
 		{
-			$wrapper .= "</div><!--end row because " . ($columns_max - ($columns + $offeset)) . " < " . $columns_at . "-->";
+			$wrapper .= "</div><!--3-->";
 			$columns_at = 1;
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
+
 		$wrapper .= "<div class=\"".$wrapper_class." component_".$config[0]."\">";
 		$wrapper .= $template;
-		$wrapper .= "</div>";
-		if($columns >= 12) $wrapper .= "</div><!-- end row because component columns >= 12 -->";
+		$wrapper .= "</div><!--2-->";
 
-		$columns_at += $columns;
+		$columns_at += $columns + $offset;
+
+		if($columns_at >= $columns_max)
+		{
+			$wrapper .= "</div><!--1-->";
+			$columns_at = 1;
+		}
 
 		return $wrapper;
 	}

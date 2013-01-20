@@ -16,6 +16,11 @@ require_once(INCLUDES."autoloader.class.php");
 
 define('STATUS','development');
 
+if($_GET['__e'] == true)
+{
+		ini_set('display_errors', '1');
+}
+
 $template = new brdi_Portal_Page_Render();
 
 echo $template->displayPage();
