@@ -66,7 +66,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 				if($this->isThisPage($navitem['href'])) $li_class = " class='active'";
 				$nav_builder .= "<li{$li_class}>";
 				$nav_builder .= "<a href='{$page_config['href']}'";
-				if($navitem['class']) $nav_builder .= " class='{$page_config['class']}'";
+				if(isset($page_config['class'])) $nav_builder .= " class='z{$page_config['class']}'";
 				$nav_builder .= ">{$page_config['title']}</a></li>";
 				if($navitem === end($this->nav)) $nav_builder .= "<li class='divider-vertical'></li>";
 				$nav_raw .= $nav_builder;
@@ -100,11 +100,12 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 				{
 					$nav_builder = "<li class='divider'></li>";
 				}
+				var_dump($navitem);
 				$li_class = "";
 				if($this->isThisPage($navitem['href'])) $li_class = " class='active'";
 				$nav_builder .= "<li{$li_class}>";
 				$nav_builder .= "<a href='{$page_config['href']}'";
-				if($navitem['class']) $nav_builder .= " class='{$page_config['class']}'";
+				if(isset($page_config['class'])) $nav_builder .= " class='{$page_config['class']}'";
 				$nav_builder .= ">{$page_config['title']}</a></li>";
 				if($navitem === end($this->nav)) $nav_builder .= "<li class='divider-vertical'></li>";
 				$nav_raw .= $nav_builder;

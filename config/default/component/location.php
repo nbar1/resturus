@@ -2,7 +2,6 @@
 $component_config = array(
 	'type' => 'Location',
 	'config' => array(
-		'location_id' => 1,
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/location/location.css',

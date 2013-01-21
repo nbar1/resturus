@@ -19,11 +19,7 @@ class brdi_Portal_Component extends brdi_Portal
 	{
 		try
 		{
-			if($config[1]['template'])
-			{
-				$template = $config[1]['template'];
-			}
-			$template = (!$config[1]['template'])?$config[0]:$config[1]['template'];
+			$template = (isset($config[1]['template']))?$config[1]['template']:$config[0];
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
 			$template = file_get_contents($template);
@@ -33,7 +29,10 @@ class brdi_Portal_Component extends brdi_Portal
 			$template = $this->getConfigOverride("assets/templates/component/error/view.php");
 		}
 		// parse component class
-		$template = $this->parseToken($template, "token://component_class", $config[1]['config']['class']);
+		if(isset($config[1]['config']['class']))
+		{
+			$template = $this->parseToken($template, "token://component_class", $config[1]['config']['class']);
+		}
 		// parse component template name
 		$template = $this->parseToken($template, "token://template_name", $template_path);
 		return $template;
@@ -49,9 +48,12 @@ class brdi_Portal_Component extends brdi_Portal
 	 */
 	public function setAllComponentJavascripts($config)
 	{
-		foreach($config['assets']['javascripts'] as $js)
+		if(isset($config['assets']['javascripts']))
 		{
-			$this->addJavascript($js);
+			foreach($config['assets']['javascripts'] as $js)
+			{
+				$this->addJavascript($js);
+			}
 		}
 		return true;
 	}
@@ -66,9 +68,12 @@ class brdi_Portal_Component extends brdi_Portal
 	 */
 	public function setAllComponentStylesheets($config)
 	{
-		foreach($config['assets']['stylesheets'] as $css)
+		if(isset($config['assets']['stylesheets']))
 		{
-			$this->addStylesheet($css);
+			foreach($config['assets']['stylesheets'] as $css)
+			{
+				$this->addStylesheet($css);
+			}
 		}
 		return true;
 	}
@@ -109,20 +114,20 @@ class brdi_Portal_Component extends brdi_Portal
 
 		if(($columns_at + $columns + $offset - 1) > $columns_max)
 		{
-			$wrapper .= "</div><!--3-->";
+			$wrapper .= "</div>";
 			$columns_at = 1;
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
 
 		$wrapper .= "<div class=\"".$wrapper_class." component_".$config[0]."\">";
 		$wrapper .= $template;
-		$wrapper .= "</div><!--2-->";
+		$wrapper .= "</div>";
 
 		$columns_at += $columns + $offset;
 
 		if($columns_at >= $columns_max)
 		{
-			$wrapper .= "</div><!--1-->";
+			$wrapper .= "</div>";
 			$columns_at = 1;
 		}
 

@@ -22,7 +22,7 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 			$config = $this->getPageConfig();
 			$page = $this->getPagePath();
 			if(!$page) $page = "404";
-			$template = (!$config['template'])?$page:$config['template'];
+			$template = (isset($config['template']))?$config['template']:$page;
 			$template = $this->getConfigOverride("assets/templates/pages/".$template."/view.php");
 			$template = file_get_contents($template);
 		}
@@ -46,7 +46,7 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 		try
 		{
 			$config = $this->getPageConfig();
-			$wrapper = (!$config['wrapper'])?"default":$config['wrapper'];
+			$wrapper = (isset($config['wrapper']))?$config['wrapper']:"default";
 			$wrapper = $this->getConfigOverride("assets/templates/wrappers/".$wrapper.".php");
 			$wrapper = file_get_contents($wrapper);
 		}

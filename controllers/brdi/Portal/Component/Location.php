@@ -25,7 +25,7 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$this->type = $config[0];
 		
 		// get location_id from config or default
-		$location_id = ($this->config['location_id'])?$this->config['location_id']:$this->getDefaultLocation();
+		$location_id = (isset($this->config['location_id']))?$this->config['location_id']:$this->getDefaultLocation();
 		if($location_id)
 		{
 			$this->location = $this->getLocationFromDatabase($location_id);
@@ -56,27 +56,29 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 	{
 		if(!$location_id) return false;
 
-		$sql = "SELECT * FROM locations WHERE loc_id='".$location_id."' AND loc_client='".$this->getClientId."' AND loc_active='1' LIMIT 1";
-		if($results = mysql_query($sql))
+		$sql = "SELECT * FROM locations WHERE loc_id='".$location_id."' AND loc_client='".$this->getClientId()."' AND loc_active='1' LIMIT 1";
+		$result = mysql_query($sql) or die(mysql_error());
+		if($result)
 		{
-			return mysql_fetch_assoc($results);
+			return mysql_fetch_assoc($result);
 		}
 		else {
-			return false;
+			throw new Exception('Location not found in database.');
 		}
 	}
 	
 	private function getDefaultLocation()
 	{
 		$sql = "SELECT loc_id FROM locations WHERE loc_client='".$this->getClientId()."' AND loc_default='1' AND loc_active='1' LIMIT 1";
-		if($results = mysql_query($sql))
+		$result = mysql_query($sql) or die(mysql_error());
+		if($result)
 		{
-			$row = mysql_fetch_assoc($results);
+			$row = mysql_fetch_assoc($result);
 			// set public $location_id as location id
-			$this->location_id = $row['loc_id'];
+			return $row['loc_id'];
 		}
 		else {
-			return false;
+			throw new Exception('Location not found in database.');
 		}
 	}
 
