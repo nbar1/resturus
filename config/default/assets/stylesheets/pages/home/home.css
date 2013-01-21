@@ -4,12 +4,12 @@
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	height: auto;
-	margin-top: 30px;
+	margin: 30px auto 0;
 	padding: 0;
 }
 /* PHONE */
 @media (max-width: 767px) {
 	#content {
-		margin-top: 20px;
+		margin-top: 0;
 	}
 }
