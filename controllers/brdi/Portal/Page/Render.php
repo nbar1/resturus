@@ -24,6 +24,7 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 			if(!$page) $page = "404";
 			$template = (isset($config['template']))?$config['template']:$page;
 			$template = $this->getConfigOverride("assets/templates/pages/".$template."/view.php");
+			if(!file_exists($template)) $template = $this->getConfigOverride("assets/templates/pages/404/view.php");
 			$template = file_get_contents($template);
 		}
 		catch(Exception $e)

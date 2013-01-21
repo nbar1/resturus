@@ -70,7 +70,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 				$nav_builder .= ">{$page_config['title']}</a></li>";
 				if($navitem === end($this->nav)) $nav_builder .= "<li class='divider-vertical'></li>";
 				$nav_raw .= $nav_builder;
-				unset($li_class);
+				unset($li_class, $page_config);
 			}
 		}
 		// build nav for phone
@@ -100,9 +100,8 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 				{
 					$nav_builder = "<li class='divider'></li>";
 				}
-				var_dump($navitem);
 				$li_class = "";
-				if($this->isThisPage($navitem['href'])) $li_class = " class='active'";
+				if($this->isThisPage($navitem)) $li_class = " class='active'";
 				$nav_builder .= "<li{$li_class}>";
 				$nav_builder .= "<a href='{$page_config['href']}'";
 				if(isset($page_config['class'])) $nav_builder .= " class='{$page_config['class']}'";

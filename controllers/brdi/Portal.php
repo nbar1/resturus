@@ -110,6 +110,10 @@ class brdi_Portal extends brdi
 				$component_assets = $component_return[0];
 				//parse token against given content
 				$content = $this->parseToken($content, "component://".$component, $component_html, false);
+				unset($component_config);
+			}
+			else {
+				$content = $this->parseToken($content, "component://".$component, "Error loading component: ".$component, false);
 			}
 		}
 		return $content;

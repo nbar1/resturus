@@ -4,7 +4,7 @@
 	<title>Resturus</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet" />
-	<link href="config/default/assets/stylesheets/global/global.css" rel="stylesheet" />
+	<link href="/config/default/assets/stylesheets/global/global.css" rel="stylesheet" />
 	<link href='http://fonts.googleapis.com/css?family=Prata' rel='stylesheet' type='text/css'>
 	!{asset://stylesheets}
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
