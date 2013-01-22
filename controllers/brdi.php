@@ -11,33 +11,36 @@ class brdi
 	public $request;
 	public $stylesheets;
 	public $javascripts;
-
-	/**
-	 * construct
-	 *
-	 * Gets client information from database on each pageload
-	 */
-	function __construct()
-	{
-		// get client based on request url
-		$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
-		$sql = "SELECT * FROM clients WHERE client_portal='{$request_url}' LIMIT 1";
-		try
-		{
-			$result = mysql_query($sql);
-			// set public $client to client information array
-			$this->client = mysql_fetch_assoc($result);
-		}
-		catch(Exception $e) {
-			echo "Caught Exception: " . $e->getMessage();
-		}
-		// set public $request to request uri
-		$this->request = $_SERVER['REQUEST_URI'];
-		// initialize assets arrays
-		$this->stylesheets = array();
-		$this->javascripts = array();
-	}
 	
+	private function getClientInformation()
+	{
+		global $client;
+		if(!isset($client['client_id']))
+		{
+			echo "sql ";
+			// get client based on request url
+			$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
+			$sql = "SELECT * FROM clients WHERE client_portal='" . $request_url . "' LIMIT 1";
+			try
+			{
+				$result = mysql_query($sql);
+				// set public $client to client information array
+				$this->client = mysql_fetch_assoc($result);
+				// set global
+				$client = $this->client;
+
+				return true;
+			}
+			catch(Exception $e) {
+				echo "Caught Exception: " . $e->getMessage();
+
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
 	/**
 	 * Returns the client id
 	 *
@@ -45,7 +48,20 @@ class brdi
 	 */
 	public function getClientId()
 	{
-		return $this->client['client_id'];
+		global $client;
+		if(isset($client['client_id']))
+		{
+			return $client['client_id'];
+		}
+		else {
+			if($this->getClientInformation())
+			{
+				return $this->client['client_id'];
+			}
+			else {
+				return false;
+			}
+		}
 	}
 	
 	/**
@@ -55,7 +71,11 @@ class brdi
 	 */
 	public function getClientName()
 	{
-		return $this->client['client_name'];
+		global $client;
+		if($this->getClientId())
+		{
+			return $client['client_name'];
+		}
 	}
 	
 	/**
@@ -65,7 +85,11 @@ class brdi
 	 */
 	public function getClientToken()
 	{
-		return $this->client['client_token'];
+		global $client;
+		if($this->getClientId())
+		{
+			return $client['client_token'];
+		}
 	}
 	
 	/**
@@ -75,7 +99,23 @@ class brdi
 	 */
 	public function getClientConfiguration()
 	{
-			return $this->client;
+		global $client;
+		if($this->getClientId())
+		{
+			return $client;
+		}
+	}
+	
+	/**
+	 * getRequestUri
+	 *
+	 * Returns the href of the current page
+	 *
+	 * @return string Href of page
+	 */
+	public function getRequestUri()
+	{
+		return $_SERVER['REQUEST_URI'];
 	}
 }
 ?>

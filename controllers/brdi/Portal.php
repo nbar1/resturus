@@ -245,7 +245,7 @@ class brdi_Portal extends brdi
 	 */
 	public function getPageHref()
 	{
-		return strtolower(str_replace("/","",$this->request));
+		return strtolower(str_replace("/","",$_SERVER['REQUEST_URI']));
 	}
 
 	/**
@@ -257,7 +257,7 @@ class brdi_Portal extends brdi
 	 */
 	public function isThisPage($config_page)
 	{
-		if(strtolower(str_replace("/","",$this->request)) == strtolower(str_replace("/","",$config_page))) return true;
+		if(strtolower(str_replace("/","", $_SERVER['REQUEST_URI'])) == strtolower(str_replace("/","",$config_page))) return true;
 		else return false;
 	}
 
