@@ -17,7 +17,6 @@ class brdi
 		global $client;
 		if(!isset($client['client_id']))
 		{
-			echo "sql ";
 			// get client based on request url
 			$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
 			$sql = "SELECT * FROM clients WHERE client_portal='" . $request_url . "' LIMIT 1";
