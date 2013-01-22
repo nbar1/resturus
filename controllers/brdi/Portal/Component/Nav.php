@@ -63,7 +63,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 					$nav_builder = "<li class='divider-vertical'></li>";
 				}
 				$li_class = "";
-				if($this->isThisPage($navitem['href'])) $li_class = " class='active'";
+				if($this->isThisPage($navitem)) $li_class = " class='active'";
 				$nav_builder .= "<li{$li_class}>";
 				$nav_builder .= "<a href='{$page_config['href']}'";
 				if(isset($page_config['class'])) $nav_builder .= " class='z{$page_config['class']}'";
