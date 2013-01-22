@@ -7,6 +7,36 @@
  */
 class brdi_Portal extends brdi
 {
+	public $stylesheets;
+	public $javascripts;
+	public $request;
+
+	/**
+	 * construct
+	 *
+	 * Gets client information from database on each pageload
+	 */
+	function __construct()
+	{
+		// get client based on request url
+		$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
+		$sql = "SELECT * FROM clients WHERE client_portal='{$request_url}' LIMIT 1";
+		try
+		{
+			$result = mysql_query($sql);
+			// set public $client to client information array
+			$this->client = mysql_fetch_assoc($result);
+		}
+		catch(Exception $e) {
+			echo "Caught Exception: " . $e->getMessage();
+		}
+		// set public $request to request uri
+		$this->request = $_SERVER['REQUEST_URI'];
+		// initialize assets arrays
+		$this->stylesheets = array();
+		$this->javascripts = array();
+	}
+
 	/**
 	 * getFileOverrides
 	 *
