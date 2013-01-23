@@ -8,8 +8,20 @@
 class brdi_Portal_Component_Nav extends brdi_Portal_Component
 {
 	public $nav;
-	public $config;
-	public $type;
+
+	private $_brdi_Portal_Component_Nav = array(
+		'nav' => array(
+			'menu',
+			'specials',
+			'locations',
+			'orderonline',
+		),
+		'assets' => array(
+			'stylesheets' => array(
+				'assets/stylesheets/components/nav/nav.css',
+			),
+		),
+	);
 
 	/**
 	 * build
@@ -21,12 +33,12 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 	 */
 	public function build($config)
 	{
-		$this->config = $config[1]['config'];
-		$this->nav = $config[1]['config']['nav'];
-		$this->type = $config[0];
+		$config = array_merge($this->_brdi_Portal_Component_Nav, $config['config'], array('type' => $config['type']));
 
-		$this->setAllComponentJavascripts($this->config);
-		$this->setAllComponentStylesheets($this->config);
+		$this->nav = $config['nav'];
+
+		$this->setAllComponentJavascripts($config);
+		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
 

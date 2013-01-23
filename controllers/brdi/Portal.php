@@ -107,7 +107,7 @@ class brdi_Portal extends brdi
 				$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
 				$comp_builder = new $comp_class();
 				// run build function
-				$component_return = $comp_builder->build(array($component, $component_config));
+				$component_return = $comp_builder->build($component_config);
 				//set component variables
 				$component_html = $component_return[1];
 				$component_assets = $component_return[0];

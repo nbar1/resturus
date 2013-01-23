@@ -9,17 +9,7 @@ $component_config = array(
 			'/assets/images/components/slider/5.jpg',
 			'/assets/images/components/slider/6.jpg',
 		),
-		'assets' => array(
-			'stylesheets' => array(
-				'assets/stylesheets/components/slider/nivo-slider.css',
-				'assets/stylesheets/components/slider/slider.css',
-			),
-			'javascripts' => array(
-				'assets/javascripts/components/slider/jquery.nivo.slider.pack.js',
-			),
-		),
 		'class' => 'hp_component slider-wrapper',
-		'columns' => 12,
 	),
 );
 ?>
