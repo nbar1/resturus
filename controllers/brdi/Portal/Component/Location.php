@@ -8,8 +8,17 @@
 class brdi_Portal_Component_Location extends brdi_Portal_Component
 {
 	public $location;
-	public $config;
-	public $type;
+	
+	private $_brdi_Portal_Component_Location = array(
+		'assets' => array(
+			'stylesheets' => array(
+				'assets/stylesheets/components/location/location.css',
+			),
+		),
+		'columns' => 4,
+		'offset' => 0,
+		'class' => '',
+	);
 
 	/**
 	 * build
@@ -21,19 +30,18 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 	 */
 	public function build($config)
 	{
-		$this->config = $config[1]['config'];
-		$this->type = $config[0];
-		
+		$config = array_merge($this->_brdi_Portal_Component_Location, $config['config'], array('type' => $config['type']));
+
 		// get location_id from config or default
-		$location_id = (isset($this->config['location_id']))?$this->config['location_id']:$this->getDefaultLocation();
+		$location_id = (isset($config['location_id']))?$config['location_id']:$this->getDefaultLocation();
 		if($location_id)
 		{
 			$this->location = $this->getLocationFromDatabase($location_id);
 		}
 
 		// set component assets
-		$this->setAllComponentJavascripts($this->config);
-		$this->setAllComponentStylesheets($this->config);
+		$this->setAllComponentJavascripts($config);
+		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
 
@@ -46,7 +54,7 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$template = $this->parseToken($template, "token://location_city", $this->getLocationCity());
 		$template = $this->parseToken($template, "token://location_state", $this->getLocationState());
 		$template = $this->parseToken($template, "token://location_zip", $this->getLocationZip());
-		
+
 		$template = $this->buildComponentWrapper($template, $config);
 
 		return array(array($this->javascripts, $this->stylesheets), $template);
