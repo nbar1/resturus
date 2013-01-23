@@ -7,6 +7,9 @@
  */
 class brdi_Portal extends brdi
 {
+	public $javascripts;
+	public $stylesheets;
+
 	/**
 	 * getFileOverrides
 	 *

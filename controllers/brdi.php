@@ -8,23 +8,23 @@
 class brdi
 {
 	public $client;
-	public $request;
-	public $stylesheets;
-	public $javascripts;
-	
+
 	private function getClientInformation()
 	{
 		global $client;
+		global $db;
 		if(!isset($client['client_id']))
-		{
-			// get client based on request url
-			$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
-			$sql = "SELECT * FROM clients WHERE client_portal='" . $request_url . "' LIMIT 1";
+		{			
 			try
 			{
-				$result = mysql_query($sql);
+				$request_url = preg_replace("/www\./", "", $_SERVER['SERVER_NAME']);
+
+				$dbh = $db->prepare("SELECT * FROM clients WHERE client_portal=? LIMIT 1");
+				$dbh->execute(array($request_url));
+				$dbh->setFetchMode(PDO::FETCH_ASSOC);				
+				
 				// set public $client to client information array
-				$this->client = mysql_fetch_assoc($result);
+				$this->client = $dbh->fetch();
 				// set global
 				$client = $this->client;
 

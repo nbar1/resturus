@@ -54,32 +54,45 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 
 	private function getLocationFromDatabase($location_id)
 	{
+		global $db;
 		if(!$location_id) return false;
 
-		$sql = "SELECT * FROM locations WHERE loc_id='".$location_id."' AND loc_client='".$this->getClientId()."' AND loc_active='1' LIMIT 1";
-		$result = mysql_query($sql) or die(mysql_error());
-		if($result)
+		try
 		{
-			return mysql_fetch_assoc($result);
+			$data = array($location_id, $this->getClientId(), 1);
+			$dbh = $db->prepare("SELECT * FROM locations WHERE loc_id=? AND loc_client=? AND loc_active=? LIMIT 1");
+			$dbh->execute($data);
+			$dbh->setFetchMode(PDO::FETCH_ASSOC);
+			$this->location = $dbh->fetch();				
+			return $this->location;
 		}
-		else {
-			throw new Exception('Location not found in database.');
+		catch(Exception $e) {
+			echo "Exception: " . $e->getMessage();
+			return false;
 		}
 	}
 	
 	private function getDefaultLocation()
 	{
-		$sql = "SELECT loc_id FROM locations WHERE loc_client='".$this->getClientId()."' AND loc_default='1' AND loc_active='1' LIMIT 1";
-		$result = mysql_query($sql) or die(mysql_error());
-		if($result)
+		global $db;
+		try
 		{
-			$row = mysql_fetch_assoc($result);
-			// set public $location_id as location id
+			$data = array($this->getClientId(), 1, 1);
+			$dbh = $db->prepare("SELECT loc_id FROM locations WHERE loc_client=? AND loc_default=? AND loc_active=? LIMIT 1");
+			$dbh->execute($data);
+			$dbh->setFetchMode(PDO::FETCH_ASSOC);				
+			$row = $dbh->fetch();
 			return $row['loc_id'];
 		}
-		else {
-			throw new Exception('Location not found in database.');
+		catch(Exception $e) {
+			echo "Exception: " . $e->getMessage();
+			return false;
 		}
+	}
+	
+	public function getLocation()
+	{
+		return $this->location;
 	}
 
 	public function getLocationTitle()
