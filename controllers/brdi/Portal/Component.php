@@ -118,7 +118,8 @@ class brdi_Portal_Component extends brdi_Portal
 			$columns_at = 1;
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
-		$wrapper .= "<div class=\"".$wrapper_class." component_".$config['type']."\">";
+		if(!isset($config['class'])) $config['class'] = "";
+		$wrapper .= "<div class=\"".trim($wrapper_class." component_".$config['type']." ".$config['class'])."\">";
 		$wrapper .= $template;
 		$wrapper .= "</div>";
 

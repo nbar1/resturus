@@ -18,7 +18,7 @@ a:hover {
 /**
  * Page Level
  */
-.display_phone {
+#content .display_phone {
 	display: none;
 }
 #content {
@@ -111,8 +111,11 @@ a:hover {
 
 /* PHONE */
 @media (max-width: 767px) {
-	.display_phone {
+	#content .display_phone {
 		display: block;
+	}
+	#content .hide_phone {
+		display: none;
 	}
 	.title_bar .title {
 		font-size: 2em;

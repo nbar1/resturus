@@ -45,13 +45,14 @@
 	clear: both;
 	float: left;
 	margin-top: 10px;
+	width: 100%;
 }
 @media (min-width: 767px) {
-	.component_Twitter .scroll {
+	.component_Twitter.scroll {
 		max-height: 500px;
 	}
-	.component_Twitter .scroll .tweets_all {
-		max-height: 430px;
+	.component_Twitter.scroll .tweets_all {
+		max-height: 410px;
 		overflow: scroll;
 	}
 }
