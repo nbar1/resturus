@@ -9,20 +9,25 @@ class brdi
 {
 	public $client;
 
+	/**
+	 * Returns client information array
+	 * Also found in global $client
+	 *
+	 * return bool
+	 */
 	private function getClientInformation()
 	{
 		global $client;
 		global $db;
 		if(!isset($client['client_id']))
-		{			
+		{
 			try
 			{
 				$request_url = preg_replace("/www\./", "", $_SERVER['SERVER_NAME']);
 
 				$dbh = $db->prepare("SELECT * FROM clients WHERE client_portal=? LIMIT 1");
 				$dbh->execute(array($request_url));
-				$dbh->setFetchMode(PDO::FETCH_ASSOC);				
-				
+				$dbh->setFetchMode(PDO::FETCH_ASSOC);
 				// set public $client to client information array
 				$this->client = $dbh->fetch();
 				// set global
@@ -40,6 +45,7 @@ class brdi
 			return true;
 		}
 	}
+
 	/**
 	 * Returns the client id
 	 *
@@ -62,7 +68,7 @@ class brdi
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the client name
 	 *
@@ -76,7 +82,7 @@ class brdi
 			return $client['client_name'];
 		}
 	}
-	
+
 	/**
 	 * Returns the client token
 	 *
@@ -90,7 +96,7 @@ class brdi
 			return $client['client_token'];
 		}
 	}
-	
+
 	/**
 	 * Returns client configuration
 	 *
@@ -104,7 +110,7 @@ class brdi
 			return $client;
 		}
 	}
-	
+
 	/**
 	 * getRequestUri
 	 *
