@@ -15,6 +15,7 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 		'limit' => 10,
 		'show_twitter_logo' => true,
 		'exclude_replies' => true,
+		'scroll_tweets' => true,
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/twitter/timeline.css',
@@ -28,6 +29,11 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 	public function build($config)
 	{
 		$this->config = array_merge($this->_brdi_Portal_Component_Twitter, $config['config'], array('type' => $config['type']));
+
+		if($this->config['scroll_tweets'] === true)
+		{
+			$this->config['class'] .= " scroll";
+		}
 
 		$response = $this->getTimelineTweets($this->config['user']);
 		$tweets = array_slice($response, 0, $this->config['limit']);
@@ -66,26 +72,44 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 			$tweet_user_display_name = $tweet['user']['name'];
 			$tweet_user_image = $tweet['user']['profile_image_url'];
 			
+			// create date
+			$tweet_created = $tweet['created_at'];
+			if(date("Ymd", strtotime($tweet_created)) == date("Ymd"))
+			{
+				$tweet_created = date("g:ia", strtotime($tweet_created));
+			}
+			elseif(date("Y", strtotime($tweet_created)) == date("Y"))
+			{
+				$tweet_created = date("M j", strtotime($tweet_created));				
+			}
+			else
+			{
+				$tweet_created = date("M j Y", strtotime($tweet_created));
+			}
+			
 			
 			$tweet_html = "";
 			if($x==0)
 			{
-				$tweet_html .= "<div class='tweet highlight_tweet'>";
 				$tweet_html .= "<div class='tweet_user'>";
 				$tweet_html .= "<div class='tweet_user_image'><img src='{$tweet_user_image}'></div>";
 				$tweet_html .= "<div class='tweet_user_name'>";
 				$tweet_html .= "<div class='tweet_user_display_name'><a href='http://twitter.com/{$tweet_user_screen_name}' target='_blank'>{$tweet_user_display_name}</a></div>";
 				$tweet_html .= "<div class='tweet_user_screen_name'><a href='http://twitter.com/{$tweet_user_screen_name}' target='_blank'>@{$tweet_user_screen_name}</a></div>";
 				$tweet_html .= "</div></div>";
+				$tweet_html .= "<div class='tweets_all'>";
+				$tweet_html .= "<div class='tweet highlight_tweet'>";
 			}
 			else {
 				$tweet_html .= "<div class='tweet'>";				
 			}
 			$tweet_html .= "<div class='tweet_text'>{$tweet_text}</div>";
+			$tweet_html .= "<div class='tweet_created'>{$tweet_created}</div>";
 			$tweet_html .= "</div>";
 			$all_tweets .= $tweet_html;
 			$x++;
 		}
+		$all_tweets .= "</div>";
 		return $all_tweets;
 	}
 	

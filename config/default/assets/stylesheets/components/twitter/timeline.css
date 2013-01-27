@@ -27,11 +27,31 @@
 }
 .component_Twitter .tweet_text {
 	border-top: 1px solid #ddd;
-	clear: both;
 	margin: 0 5px;
 	padding: 15px 5px;
+}
+.component_Twitter .tweet_created {
+	color: #999;
+	float: right;
+	font-size: 10px;
+	margin: -17px 7px 0 0;
 }
 .component_Twitter .highlight_tweet .tweet_text {
 	border: 0;
 	font-size: 20px;
+	padding-top: 5px;
+}
+.component_Twitter .tweets_all {
+	clear: both;
+	float: left;
+	margin-top: 10px;
+}
+@media (min-width: 767px) {
+	.component_Twitter .scroll {
+		max-height: 500px;
+	}
+	.component_Twitter .scroll .tweets_all {
+		max-height: 430px;
+		overflow: scroll;
+	}
 }

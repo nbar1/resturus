@@ -77,10 +77,10 @@ class brdi_Portal extends brdi
 	{
 		if($repeat)
 		{
-			return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data);
+			return preg_replace("|\!\{".preg_quote($token)."\}|", strtr($replace, array('\\' => '\\\\', '$' => '\$')), $data);
 		}
 		else {
-			return preg_replace("|\!\{".preg_quote($token)."\}|", $replace, $data, 1);
+			return preg_replace("|\!\{".preg_quote($token)."\}|", strtr($replace, array('\\' => '\\\\', '$' => '\$')), $data, 1);
 		}
 	}
 
