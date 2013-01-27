@@ -8,7 +8,44 @@
 class brdi
 {
 	public $client;
-	
+
+	/**
+	 * Returns client information array
+	 * Also found in global $client
+	 *
+	 * return bool
+	 */
+	private function getClientInformation()
+	{
+		global $client;
+		global $db;
+		if(!isset($client['client_id']))
+		{
+			try
+			{
+				$request_url = preg_replace("/www\./", "", $_SERVER['SERVER_NAME']);
+
+				$dbh = $db->prepare("SELECT * FROM clients WHERE client_portal=? LIMIT 1");
+				$dbh->execute(array($request_url));
+				$dbh->setFetchMode(PDO::FETCH_ASSOC);
+				// set public $client to client information array
+				$this->client = $dbh->fetch();
+				// set global
+				$client = $this->client;
+
+				return true;
+			}
+			catch(Exception $e) {
+				echo "Caught Exception: " . $e->getMessage();
+
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
+
 	/**
 	 * Returns the client id
 	 *
@@ -16,9 +53,22 @@ class brdi
 	 */
 	public function getClientId()
 	{
-		return $this->client['client_id'];
+		global $client;
+		if(isset($client['client_id']))
+		{
+			return $client['client_id'];
+		}
+		else {
+			if($this->getClientInformation())
+			{
+				return $this->client['client_id'];
+			}
+			else {
+				return false;
+			}
+		}
 	}
-	
+
 	/**
 	 * Returns the client name
 	 *
@@ -26,9 +76,13 @@ class brdi
 	 */
 	public function getClientName()
 	{
-		return $this->client['client_name'];
+		global $client;
+		if($this->getClientId())
+		{
+			return $client['client_name'];
+		}
 	}
-	
+
 	/**
 	 * Returns the client token
 	 *
@@ -36,9 +90,13 @@ class brdi
 	 */
 	public function getClientToken()
 	{
-		return $this->client['client_token'];
+		global $client;
+		if($this->getClientId())
+		{
+			return $client['client_token'];
+		}
 	}
-	
+
 	/**
 	 * Returns client configuration
 	 *
@@ -46,7 +104,23 @@ class brdi
 	 */
 	public function getClientConfiguration()
 	{
-			return $this->client;
+		global $client;
+		if($this->getClientId())
+		{
+			return $client;
+		}
+	}
+
+	/**
+	 * getRequestUri
+	 *
+	 * Returns the href of the current page
+	 *
+	 * @return string Href of page
+	 */
+	public function getRequestUri()
+	{
+		return $_SERVER['REQUEST_URI'];
 	}
 }
 ?>

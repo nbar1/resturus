@@ -7,6 +7,9 @@ body {
 	font-family: 'Trebuchet MS', Helvetica, sans-serif;
 	height: 100%;
 }
+a:hover {
+	text-decoration: none;
+}
 
 
 /**

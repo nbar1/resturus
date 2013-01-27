@@ -1,6 +1,6 @@
 <?php
 $component_config = array(
-	'type' => 'Location',
+	'type' => 'Twitter',
 	'config' => array(
 		'class' => 'hp_component',
 	),

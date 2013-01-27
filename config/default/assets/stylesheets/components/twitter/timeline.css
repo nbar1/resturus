@@ -1,0 +1,37 @@
+.component_Twitter .tweet_user {
+	width: 100%;
+}
+.component_Twitter .tweet_user div {
+	float: left;
+}
+.component_Twitter .twitter_logo {
+	background: url(/config/default/assets/images/components/twitter/twitter_logo.png) no-repeat;
+	float: right;
+	height: 28px;
+	width: 40px;
+}
+.component_Twitter .tweet_user_image img {
+	height: 60px;
+	width: 60px;
+}
+.component_Twitter .tweet_user_name div {
+	margin-left: 10px;
+	width: 100%;
+}
+.component_Twitter .tweet_user_display_name {
+	font-size: 20px;
+	line-height: 34px;
+}
+.component_Twitter .tweet_user_screen_name {
+	font-size: 16px;
+}
+.component_Twitter .tweet_text {
+	border-top: 1px solid #ddd;
+	clear: both;
+	margin: 0 5px;
+	padding: 15px 5px;
+}
+.component_Twitter .highlight_tweet .tweet_text {
+	border: 0;
+	font-size: 20px;
+}

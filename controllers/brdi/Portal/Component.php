@@ -19,7 +19,7 @@ class brdi_Portal_Component extends brdi_Portal
 	{
 		try
 		{
-			$template = (isset($config[1]['template']))?$config[1]['template']:$config[0];
+			$template = (isset($config['template']))?$config['template']:$config['type'];
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
 			$template = file_get_contents($template);
@@ -29,9 +29,9 @@ class brdi_Portal_Component extends brdi_Portal
 			$template = $this->getConfigOverride("assets/templates/component/error/view.php");
 		}
 		// parse component class
-		if(isset($config[1]['config']['class']))
+		if(isset($config['class']))
 		{
-			$template = $this->parseToken($template, "token://component_class", $config[1]['config']['class']);
+			$template = $this->parseToken($template, "token://component_class", $config['class']);
 		}
 		// parse component template name
 		$template = $this->parseToken($template, "token://template_name", $template_path);
@@ -98,8 +98,8 @@ class brdi_Portal_Component extends brdi_Portal
 		if($columns_at > 12) $columns_at = 1;
 
 		// get columns and offset
-		$columns = (isset($config[1]['config']['columns']))?$config[1]['config']['columns']:12;
-		$offset = (isset($config[1]['config']['offset']))?$config[1]['config']['offset']:0;
+		$columns = (isset($config['columns']))?$config['columns']:12;
+		$offset = (isset($config['offset']))?$config['offset']:0;
 
 		// keep columns and offset within range
 		if($columns < 1) $columns = 1;
@@ -118,8 +118,7 @@ class brdi_Portal_Component extends brdi_Portal
 			$columns_at = 1;
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
-
-		$wrapper .= "<div class=\"".$wrapper_class." component_".$config[0]."\">";
+		$wrapper .= "<div class=\"".$wrapper_class." component_".$config['type']."\">";
 		$wrapper .= $template;
 		$wrapper .= "</div>";
 

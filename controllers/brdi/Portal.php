@@ -7,35 +7,8 @@
  */
 class brdi_Portal extends brdi
 {
-	public $stylesheets;
 	public $javascripts;
-	public $request;
-
-	/**
-	 * construct
-	 *
-	 * Gets client information from database on each pageload
-	 */
-	function __construct()
-	{
-		// get client based on request url
-		$request_url = mysql_real_escape_string(preg_replace("/www\./", "", $_SERVER['SERVER_NAME']));
-		$sql = "SELECT * FROM clients WHERE client_portal='{$request_url}' LIMIT 1";
-		try
-		{
-			$result = mysql_query($sql);
-			// set public $client to client information array
-			$this->client = mysql_fetch_assoc($result);
-		}
-		catch(Exception $e) {
-			echo "Caught Exception: " . $e->getMessage();
-		}
-		// set public $request to request uri
-		$this->request = $_SERVER['REQUEST_URI'];
-		// initialize assets arrays
-		$this->stylesheets = array();
-		$this->javascripts = array();
-	}
+	public $stylesheets;
 
 	/**
 	 * getFileOverrides
@@ -134,7 +107,7 @@ class brdi_Portal extends brdi
 				$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
 				$comp_builder = new $comp_class();
 				// run build function
-				$component_return = $comp_builder->build(array($component, $component_config));
+				$component_return = $comp_builder->build($component_config);
 				//set component variables
 				$component_html = $component_return[1];
 				$component_assets = $component_return[0];
@@ -275,7 +248,7 @@ class brdi_Portal extends brdi
 	 */
 	public function getPageHref()
 	{
-		return strtolower(str_replace("/","",$this->request));
+		return strtolower(str_replace("/","",$_SERVER['REQUEST_URI']));
 	}
 
 	/**
@@ -287,7 +260,7 @@ class brdi_Portal extends brdi
 	 */
 	public function isThisPage($config_page)
 	{
-		if(strtolower(str_replace("/","",$this->request)) == strtolower(str_replace("/","",$config_page))) return true;
+		if(strtolower(str_replace("/","", $_SERVER['REQUEST_URI'])) == strtolower(str_replace("/","",$config_page))) return true;
 		else return false;
 	}
 

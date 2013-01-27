@@ -8,8 +8,17 @@
 class brdi_Portal_Component_Location extends brdi_Portal_Component
 {
 	public $location;
-	public $config;
-	public $type;
+	
+	private $_brdi_Portal_Component_Location = array(
+		'assets' => array(
+			'stylesheets' => array(
+				'assets/stylesheets/components/location/location.css',
+			),
+		),
+		'columns' => 4,
+		'offset' => 0,
+		'class' => '',
+	);
 
 	/**
 	 * build
@@ -21,19 +30,18 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 	 */
 	public function build($config)
 	{
-		$this->config = $config[1]['config'];
-		$this->type = $config[0];
-		
+		$config = array_merge($this->_brdi_Portal_Component_Location, $config['config'], array('type' => $config['type']));
+
 		// get location_id from config or default
-		$location_id = (isset($this->config['location_id']))?$this->config['location_id']:$this->getDefaultLocation();
+		$location_id = (isset($config['location_id']))?$config['location_id']:$this->getDefaultLocation();
 		if($location_id)
 		{
 			$this->location = $this->getLocationFromDatabase($location_id);
 		}
 
 		// set component assets
-		$this->setAllComponentJavascripts($this->config);
-		$this->setAllComponentStylesheets($this->config);
+		$this->setAllComponentJavascripts($config);
+		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
 
@@ -46,7 +54,7 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$template = $this->parseToken($template, "token://location_city", $this->getLocationCity());
 		$template = $this->parseToken($template, "token://location_state", $this->getLocationState());
 		$template = $this->parseToken($template, "token://location_zip", $this->getLocationZip());
-		
+
 		$template = $this->buildComponentWrapper($template, $config);
 
 		return array(array($this->javascripts, $this->stylesheets), $template);
@@ -54,32 +62,45 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 
 	private function getLocationFromDatabase($location_id)
 	{
+		global $db;
 		if(!$location_id) return false;
 
-		$sql = "SELECT * FROM locations WHERE loc_id='".$location_id."' AND loc_client='".$this->getClientId()."' AND loc_active='1' LIMIT 1";
-		$result = mysql_query($sql) or die(mysql_error());
-		if($result)
+		try
 		{
-			return mysql_fetch_assoc($result);
+			$data = array($location_id, $this->getClientId(), 1);
+			$dbh = $db->prepare("SELECT * FROM locations WHERE loc_id=? AND loc_client=? AND loc_active=? LIMIT 1");
+			$dbh->execute($data);
+			$dbh->setFetchMode(PDO::FETCH_ASSOC);
+			$this->location = $dbh->fetch();				
+			return $this->location;
 		}
-		else {
-			throw new Exception('Location not found in database.');
+		catch(Exception $e) {
+			echo "Exception: " . $e->getMessage();
+			return false;
 		}
 	}
 	
 	private function getDefaultLocation()
 	{
-		$sql = "SELECT loc_id FROM locations WHERE loc_client='".$this->getClientId()."' AND loc_default='1' AND loc_active='1' LIMIT 1";
-		$result = mysql_query($sql) or die(mysql_error());
-		if($result)
+		global $db;
+		try
 		{
-			$row = mysql_fetch_assoc($result);
-			// set public $location_id as location id
+			$data = array($this->getClientId(), 1, 1);
+			$dbh = $db->prepare("SELECT loc_id FROM locations WHERE loc_client=? AND loc_default=? AND loc_active=? LIMIT 1");
+			$dbh->execute($data);
+			$dbh->setFetchMode(PDO::FETCH_ASSOC);				
+			$row = $dbh->fetch();
 			return $row['loc_id'];
 		}
-		else {
-			throw new Exception('Location not found in database.');
+		catch(Exception $e) {
+			echo "Exception: " . $e->getMessage();
+			return false;
 		}
+	}
+	
+	public function getLocation()
+	{
+		return $this->location;
 	}
 
 	public function getLocationTitle()
