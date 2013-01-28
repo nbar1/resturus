@@ -10,6 +10,8 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 	public $location;
 	
 	private $_brdi_Portal_Component_Location = array(
+		'show_call_button' => true,
+		'show_maps_button' => true,
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/location/location.css',
@@ -54,6 +56,9 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$template = $this->parseToken($template, "token://location_city", $this->getLocationCity());
 		$template = $this->parseToken($template, "token://location_state", $this->getLocationState());
 		$template = $this->parseToken($template, "token://location_zip", $this->getLocationZip());
+		
+		$url_encoded_location = urlencode($this->getLocationStreet()." ".$this->getLocationCity()." ".$this->getLocationState()." ".$this->getLocationZip());
+		$template = $this->parseToken($template, "token://location_url_encoded", $url_encoded_location);
 
 		$template = $this->buildComponentWrapper($template, $config);
 
