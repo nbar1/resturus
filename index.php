@@ -1,4 +1,12 @@
 <?php
+ob_start ("ob_gzhandler");
+
+define('STATUS','development');
+
+header('Cache-Control: max-age=1800');
+
+
+
 require_once('db.php');
 
 $client = array();
@@ -13,8 +21,6 @@ $columns_max = 12;
 define('INCLUDES','brdi/includes/');
 define('CONFIG','config/');
 require_once(INCLUDES."autoloader.class.php");
-
-define('STATUS','development');
 
 if($_GET['__e'] == true)
 {

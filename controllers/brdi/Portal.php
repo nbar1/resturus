@@ -205,14 +205,15 @@ class brdi_Portal extends brdi
 	private function getAllStylesheets()
 	{
 		global $assets;
+		$css_files = array();
 		// get all stylesheets to include
 		$stylesheets = array_unique($assets['stylesheets']);
-		$html = "";
 		foreach($stylesheets as $css)
 		{
-			// parse stylesheet as html
-			$html .= "<link rel=\"stylesheet\" href=\"/".$css."\" />";
+			array_push($css_files, $css);
 		}
+		// parse stylesheet as html
+		$html = "<link rel=\"stylesheet\" type=\"text/stylesheet\" href=\"/brdi/scripts/css.php?load=".urlencode(json_encode($css_files))."\" />";
 		return $html;
 	}
 
