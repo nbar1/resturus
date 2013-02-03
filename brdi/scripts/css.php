@@ -6,6 +6,8 @@ header("Cache-Control: max-age=1800");
 /* your css files */
 $css = json_decode(urldecode($_GET['load']));
 
+if(!is_array($css)) $css = array();
+
 // include globals
 if(!isset($_GET['exclude_global'])) array_unshift($css, "config/default/assets/stylesheets/global/global.css");
 if(!isset($_GET['exclude_bootstrap'])) array_unshift($css, "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css");
