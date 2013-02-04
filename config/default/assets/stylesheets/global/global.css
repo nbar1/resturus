@@ -33,7 +33,7 @@ a:hover {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-#content.page_homepage {
+#content {
 	background: none;
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
@@ -42,6 +42,16 @@ a:hover {
 	margin: 5px auto 0;
 	overflow: visible;
 }
+#content {
+	background: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	height: auto;
+	margin: 30px auto 0;
+	padding: 0;
+}
+
 /* Title bar */
 #content .title_bar {
 	background: #ddd;
@@ -70,7 +80,7 @@ a:hover {
 
 
 /* Components */
-#content .hp_component {
+#content .component {
 	background: #eee;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;

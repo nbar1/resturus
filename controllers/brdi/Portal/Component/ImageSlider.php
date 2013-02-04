@@ -40,7 +40,7 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 		$x=1;
 		foreach($config['images'] as $image)
 		{
-			$template = $this->parseToken($template, "image://".$x, $this->getConfigOverride($image));
+			$template = $this->parseToken($template, "image://".$x, "/".$this->getConfigOverride($image));
 			$x++;
 		}
 
