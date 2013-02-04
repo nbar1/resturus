@@ -22,7 +22,13 @@ class brdi_Portal_Component extends brdi_Portal
 			$template = (isset($config['template']))?$config['template']:$config['type'];
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
-			$template = file_get_contents($template);
+			if($template !== FALSE)
+			{
+				$template = file_get_contents($template);
+			}
+			else {
+				error_log("Error loading template: ".$template);
+			}
 		}
 		catch(Exception $e)
 		{
@@ -119,7 +125,7 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
 		if(!isset($config['class'])) $config['class'] = "";
-		$wrapper .= "<div class=\"".trim($wrapper_class." component_".$config['type']." ".$config['class'])."\">";
+		$wrapper .= "<div class=\"component ".trim($wrapper_class." component_".$config['type']." ".$config['class'])."\">";
 		$wrapper .= $template;
 		$wrapper .= "</div>";
 

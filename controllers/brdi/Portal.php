@@ -34,6 +34,7 @@ class brdi_Portal extends brdi
 		// file not found
 		else
 		{
+			echo "nothing at ".CONFIG."default/".$path;
 			return false;
 		}
 	}
@@ -94,7 +95,7 @@ class brdi_Portal extends brdi
 	 */
 	private function parseAllComponents($content)
 	{
-		preg_match_all("|\!\{component\://(\w+)\}|", $content, $components);
+		preg_match_all("|\!\{component\://([A-Za-z0-9-/_]+)\}|", $content, $components);
 		foreach($components[1] as $component)
 		{
 			// get $component_config
