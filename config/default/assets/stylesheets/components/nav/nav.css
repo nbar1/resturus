@@ -29,11 +29,26 @@
 /* Phone Menu */
 .navbar .btn-navbar {
 	height: 30px;
-	margin-top: 4px;
+	margin-top: 10px;
 }
 #phone_nav {
 	background: #eee;
 	-moz-box-shadow: 0px 3px 2px rgba(200, 200, 200, 0.4);
 	-webkit-box-shadow: 0px 3px 2px rgba(200, 200, 200, 0.4);
 	box-shadow: 0px 3px 2px rgba(200, 200, 200, 0.4);
+}
+
+@media (max-width: 979px) {
+	#mainnav .navbar-inner {
+		padding: 0 5px;
+	}
+	#mainnav .navbar-inner .brand {
+		padding: 15px 25px 15px 10px;
+	}
+	#mainnav .nav > li.divider-vertical {
+		padding: 5px 0
+	}
+	#mainnav .nav > li > a {
+		padding: 15px 24px;
+	}
 }
