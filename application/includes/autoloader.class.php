@@ -9,7 +9,7 @@ class Autoloader
 			return TRUE;
 		}
 		$class_path = str_replace("_", "/", $class);
-		$file = "controllers/" . $class_path . '.php';
+		$file = "application/" . $class_path . '.php';
 		if(!file_exists($file))
 		{
 			echo 'The file containing the requested class was not found: ' . $class;

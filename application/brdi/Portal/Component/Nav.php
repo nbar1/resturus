@@ -16,6 +16,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 			'locations',
 			'orderonline',
 		),
+		'show_title' => true,
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/nav/nav.css',
@@ -41,8 +42,13 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-
-		$template = $this->parseToken($template, "token://clientName", $this->getClientName());
+		if($config['show_title'] === true)
+		{
+			$template = $this->parseToken($template, "token://clientName", $this->getClientName());
+		}
+		else {
+			$template = $this->parseToken($template, "token://clientName", "");
+		}
 		$template = $this->parseToken($template, "token://pageNav", $this->getPageNav());
 		$template = $this->parseToken($template, "token://mobileNav", $this->getPageNav());
 
