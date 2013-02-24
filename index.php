@@ -18,7 +18,7 @@ $columns_at = 1;
 $columns_max = 12;
 
 
-define('INCLUDES','brdi/includes/');
+define('INCLUDES','application/includes/');
 define('CONFIG','config/');
 require_once(INCLUDES."autoloader.class.php");
 
