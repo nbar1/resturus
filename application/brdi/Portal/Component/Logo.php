@@ -1,6 +1,10 @@
 <?php
 /**
+<<<<<<< HEAD
  * brdi_Portal_Component_Logo
+=======
+ * brdi_Portal_Component_Nav
+>>>>>>> e97318f84a1ca16ad87b7436e6dc12ff9489f494
  *
  * @author Nick Barone
  * @copyright Copyright (c) Resturus, 2013

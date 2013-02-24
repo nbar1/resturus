@@ -34,7 +34,6 @@ class brdi_Portal extends brdi
 		// file not found
 		else
 		{
-			echo "nothing at ".CONFIG."default/".$path;
 			return false;
 		}
 	}
