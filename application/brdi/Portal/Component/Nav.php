@@ -7,7 +7,8 @@
  */
 class brdi_Portal_Component_Nav extends brdi_Portal_Component
 {
-	public $nav;
+	private $nav;
+	private $pageTitle;
 
 	private $_brdi_Portal_Component_Nav = array(
 		'nav' => array(
@@ -17,6 +18,8 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 			'orderonline',
 		),
 		'show_title' => true,
+		'center' => false,
+		'links_only' => false,
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/nav/nav.css',
@@ -35,22 +38,41 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 	public function build($config)
 	{
 		$config = array_merge($this->_brdi_Portal_Component_Nav, $config['config'], array('type' => $config['type']));
+		
+		if($config['center'] === true)
+		{
+			array_push($config['assets']['stylesheets'], 'assets/stylesheets/components/nav/nav_centered.css');
+			array_filter($config['assets']['stylesheets']);
+		}
+		if($config['links_only'] === true)
+		{
+			array_push($config['assets']['stylesheets'], 'assets/stylesheets/components/nav/nav_links.css');
+			array_filter($config['assets']['stylesheets']);
+		}
 
 		$this->nav = $config['nav'];
+		$this->pageTitle = $this->getClientName();
 
 		$this->setAllComponentJavascripts($config);
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-		if($config['show_title'] === true)
+		if($config['links_only'] === true)
 		{
-			$template = $this->parseToken($template, "token://clientName", $this->getClientName());
+			$template = $this->parseToken($template, "token://portal/nav/links/", $this->getNavLinks());
 		}
 		else {
-			$template = $this->parseToken($template, "token://clientName", "");
+			if($config['show_title'] === true)
+			{
+				$template = $this->parseToken($template, "token://clientName", $this->getClientName());
+			}
+			else {
+				$template = $this->parseToken($template, "token://clientName", "");
+			}
+			$template = $this->parseToken($template, "token://pageNav", $this->getNavBar());
+			$template = $this->parseToken($template, "token://mobileNav", $this->getNavBar(true));
+			$template = $this->parseToken($template, "token://page/title", $this->pageTitle);
 		}
-		$template = $this->parseToken($template, "token://pageNav", $this->getPageNav());
-		$template = $this->parseToken($template, "token://mobileNav", $this->getPageNav());
 
 		$template = $this->buildComponentWrapper($template, $config);
 
@@ -64,7 +86,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 	 *
 	 * @return String Html formatted nav
 	 */
-	private function getPageNav()
+	private function getNavBar($mobile = false)
 	{
 		$nav_raw = "";
 		foreach($this->nav as $navitem)
@@ -72,6 +94,10 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 			include($this->getConfigOverride("/page/".$navitem.".php"));
 			if($page_config)
 			{
+				if($this->isThisPage($navitem)) 
+				{
+					$this->pageTitle = $page_config['title'];
+				}
 				if($navitem == $this->nav[0])
 				{
 					$nav_builder = "<li class='divider-vertical first'></li>";
@@ -84,7 +110,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 				if($this->isThisPage($navitem)) $li_class = " class='active'";
 				$nav_builder .= "<li{$li_class}>";
 				$nav_builder .= "<a href='{$page_config['href']}'";
-				if(isset($page_config['class'])) $nav_builder .= " class='z{$page_config['class']}'";
+				if(isset($page_config['class'])) $nav_builder .= " class='{$page_config['class']}'";
 				$nav_builder .= ">{$page_config['title']}</a></li>";
 				if($navitem === end($this->nav)) $nav_builder .= "<li class='divider-vertical'></li>";
 				$nav_raw .= $nav_builder;
@@ -92,6 +118,35 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 			}
 		}
 		// build nav for phone
+		return $nav_raw;
+	}
+	
+	/**
+	 * getNavLinks
+	 *
+	 * Returns html formatted nav links
+	 *
+	 * @return String Html formatted nav links
+	 */
+	public function getNavLinks()
+	{
+		$nav_raw = "";
+		foreach($this->nav as $navitem)
+		{
+			include($this->getConfigOverride("/page/".$navitem.".php"));
+			if($page_config)
+			{
+				$nav_builder = "";
+				if($navitem !== $this->nav[0])
+				{
+					$nav_builder .= "&nbsp;&nbsp;|&nbsp;&nbsp;";
+				}
+				$nav_builder .= "<a href='{$page_config['href']}'>{$page_config['title']}</a>";
+
+				$nav_raw .= $nav_builder;
+				unset($page_config);
+			}
+		}
 		return $nav_raw;
 	}
 }

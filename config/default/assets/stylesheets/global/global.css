@@ -126,3 +126,28 @@ a:hover {
 		padding: 15px;
 	}
 }
+
+
+
+/* Height Sets */
+.height_100 {
+	height: 100px;
+}
+.height_150 {
+	height: 150px;
+}
+.height_200 {
+	height: 200px;
+}
+.height_250 {
+	height: 250px;
+}
+.height_300 {
+	height: 300px;
+}
+.height_350 {
+	height: 350px;
+}
+.height_400 {
+	height: 400px;
+}

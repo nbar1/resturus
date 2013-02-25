@@ -1,6 +1,7 @@
 <div id="mainnav" class="navbar navbar navbar-fixed-top">
 	<div class="navbar-inner">
-		<a class="brand" href="/">!{token://clientName}</a>
+		<a class="brand hidden-phone" href="/">!{token://clientName}</a>
+		<a class="brand visible-phone">!{token://page/title}</a>
 		<ul class="nav hidden-phone">
 			!{token://pageNav}
 		</ul>

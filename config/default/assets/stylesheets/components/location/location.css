@@ -1,3 +1,7 @@
 .component_Location .intent_button {
 	margin-top: 7px;
 }
+.component_Location .Component_Location_Title {
+	font-size: 16px;
+	font-weight: bold;
+}

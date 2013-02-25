@@ -14,9 +14,9 @@
 	height: 60px;
 	width: 60px;
 }
-.component_Twitter .tweet_user_name div {
+.component_Twitter .tweet_user_name {
 	margin-left: 10px;
-	width: 100%;
+	width: 200px;
 }
 .component_Twitter .tweet_user_display_name {
 	font-size: 20px;
@@ -27,6 +27,7 @@
 }
 .component_Twitter .tweet_text {
 	border-top: 1px solid #ddd;
+	line-height: 28px;
 	margin: 0 5px;
 	padding: 15px 5px;
 }

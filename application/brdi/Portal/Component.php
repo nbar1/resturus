@@ -41,6 +41,10 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		// parse component template name
 		$template = $this->parseToken($template, "token://template_name", $template_path);
+
+		// parse any components in this component
+		$template = $this->parseAllComponents($template);
+
 		return $template;
 	}
 

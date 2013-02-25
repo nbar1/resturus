@@ -3,7 +3,7 @@ ob_start ("ob_gzhandler");
 
 define('STATUS','development');
 
-header('Cache-Control: max-age=1800');
+//header('Cache-Control: max-age=1800');
 
 
 

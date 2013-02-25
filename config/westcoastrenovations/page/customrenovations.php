@@ -1,10 +1,10 @@
 <?php
 $page_config = array(
-	'title' => 'Home',
-	'href' => '/',
+	'title' => 'Custom Renovations',
+	'href' => '/customrenovations/',
 	'assets' => array(
 		'stylesheets' => array(
-			'assets/stylesheets/pages/home/home.css',
+		
 		),
 		'javascripts' => array(
 		

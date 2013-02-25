@@ -1,18 +1,16 @@
 <?php
 /**
- * brdi_Portal_Component_Logo
+ * brdi_Portal_Component_Footer
  *
  * @author Nick Barone
  * @copyright Copyright (c) Resturus, 2013
  */
-class brdi_Portal_Component_Logo extends brdi_Portal_Component
+class brdi_Portal_Component_Footer extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_Logo = array(
-		'src' => 'assets/images/components/logo/logo.png',
-		'href' => '/',
+	private $_brdi_Portal_Component_Footer = array(
 		'assets' => array(
 			'stylesheets' => array(
-				'assets/stylesheets/components/logo/logo.css',
+				'assets/stylesheets/components/footer/footer.css',
 			),
 		),
 	);
@@ -27,15 +25,16 @@ class brdi_Portal_Component_Logo extends brdi_Portal_Component
 	 */
 	public function build($config)
 	{
-		$config = array_merge($this->_brdi_Portal_Component_Logo, $config['config'], array('type' => $config['type']));
+		$config = array_merge($this->_brdi_Portal_Component_Footer, $config['config'], array('type' => $config['type']));
 
+		// set component assets
 		$this->setAllComponentJavascripts($config);
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-
-		$template = $this->parseToken($template, "token://logo/src", "/".$this->getConfigOverride($config['src']));
-		$template = $this->parseToken($template, "token://logo/href", $config['href']);
+		
+		$template = $this->parseToken($template, "token://client/name/", $this->getClientName());
+		$template = $this->parseToken($template, "token://global/year/", date("Y"));
 
 		$template = $this->buildComponentWrapper($template, $config);
 

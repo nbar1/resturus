@@ -18,6 +18,7 @@
 <div id="content" class="container-fluid page_!{token://page}">
 	!{template://internal}
 </div>
+!{component://Footer}
 <br />
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 </body>

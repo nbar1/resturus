@@ -34,6 +34,7 @@ class brdi_Portal extends brdi
 		// file not found
 		else
 		{
+			error_log("No assets found at ".$path);
 			return false;
 		}
 	}
@@ -92,7 +93,7 @@ class brdi_Portal extends brdi
 	 * @param String $content Template with components
 	 * @return String Template with components included
 	 */
-	private function parseAllComponents($content)
+	public function parseAllComponents($content)
 	{
 		preg_match_all("|\!\{component\://([A-Za-z0-9-/_]+)\}|", $content, $components);
 		foreach($components[1] as $component)
@@ -253,6 +254,27 @@ class brdi_Portal extends brdi
 	}
 
 	/**
+	 * getPageRoot
+	 *
+	 * Returns the root href of the current page
+	 *
+	 * @return string Root href of page
+	 */
+	public function getPageRoot($url = false)
+	{
+		if(!$url) $url = $_SERVER['REQUEST_URI'];
+		$requesturl = explode("/", $url);
+		if(strlen($requesturl[0]) < 1)
+		{
+			$requesturl = $requesturl[1];
+		}
+		else {
+			$requesturl = $requesturl[0];
+		}
+		return strtolower($requesturl);
+	}
+
+	/**
 	 * isThisPage
 	 *
 	 * Returns wether the current page is the same Href as the passed in Href
@@ -261,7 +283,7 @@ class brdi_Portal extends brdi
 	 */
 	public function isThisPage($config_page)
 	{
-		if(strtolower(str_replace("/","", $_SERVER['REQUEST_URI'])) == strtolower(str_replace("/","",$config_page))) return true;
+		if($this->getPageRoot() == $this->getPageRoot($config_page)) return true;
 		else return false;
 	}
 

@@ -1,0 +1,26 @@
+#mainnav .navbar-inner {
+	text-align: center;
+}
+#mainnav .navbar-inner ul.nav {
+	height: 40px;
+}
+#mainnav .navbar-inner ul.nav li {
+	display: inline-block;
+	float: none;
+}
+#mainnav .navbar-inner ul.nav li.divider-vertical {
+	clear: both;
+	display: inline;
+	padding: 12px 0;
+}
+
+@media (max-width: 979px) {
+	#mainnav .navbar-inner ul.nav {
+		height: 50px;
+	}
+	#mainnav .navbar-inner ul.nav li.divider-vertical {
+		clear: both;
+		display: inline;
+		padding: 17px 0;
+	}
+}

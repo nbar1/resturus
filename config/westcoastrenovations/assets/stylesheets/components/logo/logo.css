@@ -1,0 +1,10 @@
+#logo {
+	margin: 10px 0 5px -20px;
+	text-align: center;
+}
+/* PHONE */
+@media (max-width: 767px) {
+	#logo {
+		margin: 10px 0 5px -10px;
+	}
+}

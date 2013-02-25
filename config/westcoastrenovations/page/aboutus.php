@@ -1,10 +1,10 @@
 <?php
 $page_config = array(
-	'title' => 'Home',
-	'href' => '/',
+	'title' => 'About Us',
+	'href' => '/aboutus/',
 	'assets' => array(
 		'stylesheets' => array(
-			'assets/stylesheets/pages/home/home.css',
+		
 		),
 		'javascripts' => array(
 		
