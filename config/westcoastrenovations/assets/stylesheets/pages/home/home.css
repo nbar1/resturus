@@ -2,3 +2,10 @@
 .component_Twitter {
 	height: 150px;
 }
+/* PHONE */
+@media (max-width: 767px) {
+	.component_Location,
+	.component_Twitter {
+		height: auto;
+	}	
+}
