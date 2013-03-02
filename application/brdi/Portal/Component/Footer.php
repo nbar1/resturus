@@ -8,6 +8,7 @@
 class brdi_Portal_Component_Footer extends brdi_Portal_Component
 {
 	private $_brdi_Portal_Component_Footer = array(
+		'subfooter_html' => '',
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/footer/footer.css',
@@ -33,12 +34,19 @@ class brdi_Portal_Component_Footer extends brdi_Portal_Component
 
 		$template = $this->getComponentTemplate($config);
 		
-		$template = $this->parseToken($template, "token://client/name/", $this->getClientName());
-		$template = $this->parseToken($template, "token://global/year/", date("Y"));
+		$content = array(
+			'global' => array(
+				'year' => date("Y"),
+			),
+			'subfooter' => $config['subfooter_html'],
+			'client' => array(
+				'name' => $this->getClientName(),
+			),
+		);
 
 		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template);
+		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
 	}
 }
 ?>

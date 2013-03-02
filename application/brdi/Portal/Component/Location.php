@@ -47,30 +47,31 @@ class brdi_Portal_Component_Location extends brdi_Portal_Component
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-
-		$template = $this->parseToken($template, "token://location_title", $this->getLocationTitle());
-		$template = $this->parseToken($template, "token://location_subtitle", $this->getLocationSubtitle());
-		$template = $this->parseToken($template, "token://location_description", $this->getLocationDescription());
-		$template = $this->parseToken($template, "token://location_hours", $this->getLocationHours());
-		$template = $this->parseToken($template, "token://location_phone", $this->getLocationPhone());
-		$template = $this->parseToken($template, "token://location_street", $this->getLocationStreet());
-		$template = $this->parseToken($template, "token://location_city", $this->getLocationCity());
-		$template = $this->parseToken($template, "token://location_state", $this->getLocationState());
-		$template = $this->parseToken($template, "token://location_zip", $this->getLocationZip());
-		if($config['maps_always_visible'] === false)
-		{
-			$template = $this->parseToken($template, "token://maps_always_visible", "visible-phone");
-		}
-		else {
-			$template = $this->parseToken($template, "token://maps_always_visible", "");			
-		}
 		
-		$url_encoded_location = urlencode($this->getLocationStreet()." ".$this->getLocationCity()." ".$this->getLocationState()." ".$this->getLocationZip());
-		$template = $this->parseToken($template, "token://location_url_encoded", $url_encoded_location);
+		$params = array(
+			'location' => array(
+				'title' => $this->getLocationTitle(),
+				'subtitle' => $this->getLocationSubtitle(),
+				'description' => $this->getLocationDescription(),
+				'hours' => $this->getLocationHours(),
+				'phone' => $this->getLocationPhone(),
+				'street' => $this->getLocationStreet(),
+				'city' => $this->getLocationCity(),
+				'state' => $this->getLocationState(),
+				'zip' => $this->getLocationZip(),
+				'urlencoded' => urlencode($this->getLocationStreet()." ".$this->getLocationCity()." ".$this->getLocationState()." ".$this->getLocationZip()),
+			),
+			'maps_always_visible' => "visible-phone",
+		);
+		
+		if(!$config['maps_always_visible'] === false)
+		{
+			$params['maps_always_visible'] = false;
+		}
 
 		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template);
+		return array(array($this->javascripts, $this->stylesheets), $template, $params, $config);
 	}
 
 	private function getLocationFromDatabase($location_id)

@@ -112,9 +112,9 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 		$this->setAllPageJavascripts();
 		$this->setAllPageStylesheets();
 		
-		$content = $this->tokenize($config);
+		$template = $this->tokenize($config);
 		
-		return $content;
+		return $template;
 	}
 }
 ?>

@@ -1,14 +1,15 @@
 <?php
 /**
- * brdi_Portal_Component_ImageSlider
+ * brdi_Portal_Component_PhotoGallery
  *
  * @author Nick Barone
  * @copyright Copyright (c) Resturus, 2013
  */
-class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
+class brdi_Portal_Component_PhotoGallery extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_ImageSlider = array(
+	private $_brdi_Portal_Component_PhotoGallery = array(
 		'images' => array(),
+		'style' => 'large',
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/slider/nivo-slider.css',
@@ -18,7 +19,7 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 				'assets/javascripts/components/slider/jquery.nivo.slider.pack.js',
 			),
 		),
-		'class' => 'slider-wrapper',
+		'class' => '',
 		'columns' => 12,
 	);
 	/**
@@ -31,21 +32,27 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 	 */
 	public function build($config)
 	{
-		$config = array_merge($this->_brdi_Portal_Component_ImageSlider, $config['config'], array('type' => $config['type']));
+		$config = array_merge($this->_brdi_Portal_Component_PhotoGallery, $config['config'], array('type' => $config['type']));
 		$this->setAllComponentJavascripts($config);
 		$this->setAllComponentStylesheets($config);
+		
+		if($config['style'] === "large")
+		{
+			$config['template'] = "photogallery_large";
+		}
+		elseif($config['style'] === "modal") {
+			$config['template'] = "photogallery_modal";
+		}
 
 		$template = $this->getComponentTemplate($config);
 
-		$x=1;
-		foreach($config['images'] as $image)
-		{
-			$content['images'][$x] = $this->getConfigOverride($image);
-			$x++;
-		}
-
 		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		return array(array($this->javascripts, $this->stylesheets), $template);
+	}
+	
+	private function buildImages($config)
+	{
+		
 	}
 }

@@ -38,6 +38,183 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
+	
+	/**
+	 * getTokens
+	 *
+	 * @param String $template Template file to search
+	 * @return Array tokens, types, and paths
+	 */
+	private function getTokens($template)
+	{
+		preg_match_all("|!{(.+?)://([A-Za-z0-9/_\. ]+)/?}|", $template, $matches);
+		foreach($matches[2] as $k=>$v)
+		{
+			$matches[2][$k] = explode("/", $v);
+		}
+		return $matches;
+	}
+	
+	public function renderTokens($template, $content = array(), $config = array())
+	{
+		$tokens = $this->getTokens($template);
+		foreach($tokens[1] as $k=>$type)
+		{
+			$raw_token = $tokens[0][$k];
+			$params = $tokens[2][$k];
+			//echo $type.":".$raw_token."<br>";
+			switch($type)
+			{
+				case "component":
+					$component = implode("/", $params);
+					$config = $this->getConfigOverride("component/".strtolower($component).".php");
+					if($config !== false)
+					{
+						include($config);
+			
+						if($component_config)
+						{
+							// build component class
+							$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
+							$comp_builder = new $comp_class();
+							// run build function
+							$component_return = $comp_builder->build($component_config);
+							//set component variables
+							$component_assets = $component_return[0];
+							$component_html = $this->renderTokens($component_return[1], $component_return[2], $component_return[3]);
+							//parse token against given content
+							$template = $this->replaceToken($template, $raw_token, $component_html, false);
+							unset($component_config);
+						}
+						else {
+							$template = $this->replaceToken($template, $raw_token, "Error loading component: ".$component, false);
+						}
+					}
+				break;
+
+				case "html":
+					$template = $this->replaceToken($template, $raw_token, $this->getContent($params, $content));
+				break;
+
+				case "if";
+					if($this->getContent($params[0], $content) === true)
+					{
+						$this->replaceToken($template, $raw_token, "");
+						$this->replaceToken($template, "!{endif://{$params[0]}/}", "");
+					}
+					else {
+						$delif = explode("!{if://{$params[0]}/}", $template, 1);
+						$delendif = explode("!{endif://{$params[0]}/}", $template, 1);
+						$template = $delif[0].$delendif[1];
+					}
+				break;
+
+				case "image":
+					$params = array_filter($params);
+					$image_class = array_pop($params);
+					if(strstr($image_class, ".")) 
+					{
+						array_push($params, $image_class);
+						$image_class = "";
+					}
+					$params = implode("/", $params);
+					$src = $this->getConfigOverride($params);
+					if($src) $template = $this->replaceToken($template, $raw_token, "<img src='/{$src}' class='{$image_class}' />");
+				break;
+
+				case "token":
+					$template = $this->replaceToken($template, $raw_token, $this->getContent($params, $content));
+				break;
+			}
+		}
+		return $template;
+	}
+	
+	public function renderAssets($template)
+	{
+		$tokens = $this->getTokens($template);
+		foreach($tokens[1] as $k=>$type)
+		{
+			$raw_token = $tokens[0][$k];
+			$params = $tokens[2][$k];
+			if($params[0] === "stylesheet")
+			{
+				if($params[1] == "global")
+				{
+					$template = $this->replaceToken($template, $raw_token, $this->getAllStylesheets());
+				}
+				else
+				{
+					array_shift($params);
+					$asset = $this->getConfigOverride(implode("/", $params).".css");
+				}
+				
+			}
+			elseif($params[0] === "javascript")
+			{
+				if($params[1] == "global")
+				{
+					$template = $this->replaceToken($template, $raw_token, $this->getAllJavascripts());
+				}
+				else
+				{
+					array_shift($params);
+					$asset = $this->getConfigOverride(implode("/", $params).".js");
+				}
+			}
+			else
+			{
+				$template = $this->replaceToken($template, $raw_token, "");
+			}
+		}
+		return $template;
+	}
+	
+	public function replaceToken($template, $token, $new, $repeat = true)
+	{
+		if($repeat)
+		{
+			return preg_replace("|".preg_quote($token)."|", $new, $template);
+		}
+		else {
+			return preg_replace("|".preg_quote($token)."|", $new, $template, 1);
+		}
+	}
+	
+	private function getContent($type, $content)
+	{
+		if(is_array($type))
+		{
+			$type = array_filter($type);
+			$array = "\$content";
+			for($i=0; $i<sizeof($type); $i++)
+			{
+				if(((int) $type[$i] === 0 && $type[$i] == "0") || ((int) $type[$i] > 0))
+				{
+					$array .= "[".$type[$i]."]";
+				}
+				else
+				{
+					$array .= "['".$type[$i]."']";
+				}
+			}
+			// the fuck??
+			try
+			{
+				eval("\$thecontent = ".$array.";");
+			}
+			catch (Exception $e)
+			{
+				$thecontent = "";
+			}
+			return $thecontent;
+		}
+		else
+		{
+			return $content[$type];
+		}
+		
+	}
 
 	/**
 	 * tokenize
@@ -50,78 +227,40 @@ class brdi_Portal extends brdi
 	public function tokenize($config)
 	{
 		global $assets;
-		$content = $config['wrapper'];
-		// parse page template
-		$content = $this->parseToken($content, "template://internal", $config['template']);
-		// parse all compnents on page
-		$content = $this->parseAllComponents($content);
-		// parse assets
-		$content = $this->parseToken($content, "asset://stylesheets", $this->getAllStylesheets());
-		$content = $this->parseToken($content, "asset://javascripts", $this->getAllJavascripts());
-		// parse page id
-		$content = $this->parseToken($content, "token://page", $config['pageid']);
+		$template = $config['wrapper'];
+		
+		//$template = $this->replaceToken($template, "!{token://page}", $config['pageid']);
+		$template = $this->replaceToken($template, "!{template://internal}", $config['template']);
+		$template = $this->renderTokens($template, array('page' => $config['pageid']), $config);
+		
+		
+		
+		$template = $this->renderAssets($template, array(), $config);
+		
+		// clean up any loose ends
+		//mail("xnickbarone@gmail.com", "",$template);
+		
 
-		return $content;
+		return $template;
 	}
 
-	/**
-	 * parseToken
-	 *
-	 * Parses a given token against a given value
-	 *
-	 * @param String $data String with given token, raw data
-	 * @param String $token Token to replace
-	 * @param String $replace String to replace token with
-	 * @return String Complete data
-	 */
-	public function parseToken($data, $token, $replace, $repeat = true)
-	{
-		if($repeat)
-		{
-			return preg_replace("|\!\{".preg_quote($token)."\}|", strtr($replace, array('\\' => '\\\\', '$' => '\$')), $data);
-		}
-		else {
-			return preg_replace("|\!\{".preg_quote($token)."\}|", strtr($replace, array('\\' => '\\\\', '$' => '\$')), $data, 1);
-		}
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-	/**
-	 * parseAllComponents
-	 *
-	 * Parse all components in the given template
-	 *
-	 * @param String $content Template with components
-	 * @return String Template with components included
-	 */
-	public function parseAllComponents($content)
-	{
-		preg_match_all("|\!\{component\://([A-Za-z0-9-/_]+)\}|", $content, $components);
-		foreach($components[1] as $component)
-		{
-			// get $component_config
-			$config = $this->getConfigOverride("component/".strtolower($component).".php");
-			include($config);
-
-			if($component_config)
-			{
-				// build component class
-				$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
-				$comp_builder = new $comp_class();
-				// run build function
-				$component_return = $comp_builder->build($component_config);
-				//set component variables
-				$component_html = $component_return[1];
-				$component_assets = $component_return[0];
-				//parse token against given content
-				$content = $this->parseToken($content, "component://".$component, $component_html, false);
-				unset($component_config);
-			}
-			else {
-				$content = $this->parseToken($content, "component://".$component, "Error loading component: ".$component, false);
-			}
-		}
-		return $content;
-	}
 
 	/**
 	 * addJavascript
@@ -214,7 +353,7 @@ class brdi_Portal extends brdi
 			array_push($css_files, $css);
 		}
 		// parse stylesheet as html
-		$html = "<link rel=\"stylesheet\" type=\"text/stylesheet\" href=\"/brdi/scripts/css.php?load=".urlencode(json_encode($css_files))."\" />";
+		$html = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/brdi/scripts/css.php?load=".urlencode(json_encode($css_files))."\" />";
 		return $html;
 	}
 

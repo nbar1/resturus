@@ -44,11 +44,11 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 
 		$template = $this->getComponentTemplate($this->config);
 
-		$template = $this->parseToken($template, "token://tweets", $this->buildTimeline($tweets));
+		$params = array('tweets' => $this->buildTimeline($tweets));
 
 		$template = $this->buildComponentWrapper($template, $this->config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template);
+		return array(array($this->javascripts, $this->stylesheets), $template, $params, $config);
 		
 	}
 

@@ -20,6 +20,7 @@ class brdi_Portal_Component extends brdi_Portal
 		try
 		{
 			$template = (isset($config['template']))?$config['template']:$config['type'];
+			if($_GET['__e']) echo "trying to load "."assets/templates/components/".strtolower($template)."/view.php<br />";
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
 			if($template !== FALSE)
@@ -37,13 +38,13 @@ class brdi_Portal_Component extends brdi_Portal
 		// parse component class
 		if(isset($config['class']))
 		{
-			$template = $this->parseToken($template, "token://component_class", $config['class']);
+			$template = $this->replaceToken($template, "!{token://component_class}", $config['class']);
 		}
 		// parse component template name
-		$template = $this->parseToken($template, "token://template_name", $template_path);
+		$template = $this->replaceToken($template, "!{token://template_name}", $template_path);
 
 		// parse any components in this component
-		$template = $this->parseAllComponents($template);
+		//$template = $this->renderTokens($template);
 
 		return $template;
 	}

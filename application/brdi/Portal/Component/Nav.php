@@ -51,32 +51,34 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		}
 
 		$this->nav = $config['nav'];
-		$this->pageTitle = $this->getClientName();
 
 		$this->setAllComponentJavascripts($config);
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-		if($config['links_only'] === true)
+		
+		$content = array(
+			'nav' => array(
+				'page' => $this->getNavBar(),
+				'mobile' => $this->getNavBar(true),
+				'links' => $this->getNavLinks(),
+			),
+			'page' => array(
+				'title' => $this->getClientName(),
+			),
+			'client' => array(
+				'name' => $this->getClientName(),
+			),
+		);
+
+		if(!$config['show_title'] === true)
 		{
-			$template = $this->parseToken($template, "token://portal/nav/links/", $this->getNavLinks());
-		}
-		else {
-			if($config['show_title'] === true)
-			{
-				$template = $this->parseToken($template, "token://clientName", $this->getClientName());
-			}
-			else {
-				$template = $this->parseToken($template, "token://clientName", "");
-			}
-			$template = $this->parseToken($template, "token://pageNav", $this->getNavBar());
-			$template = $this->parseToken($template, "token://mobileNav", $this->getNavBar(true));
-			$template = $this->parseToken($template, "token://page/title", $this->pageTitle);
+			$content['client']['name'] = "";
 		}
 
 		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template);
+		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
 	}
 
 	/**

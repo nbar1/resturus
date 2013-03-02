@@ -3,9 +3,9 @@
 <head>
 	<title>West Coast Renovations</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	!{asset://stylesheets}
+	!{asset://stylesheet/global/}
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
-	!{asset://javascripts}
+	!{asset://javascript/global/}
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

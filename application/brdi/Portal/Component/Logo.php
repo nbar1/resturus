@@ -33,13 +33,17 @@ class brdi_Portal_Component_Logo extends brdi_Portal_Component
 		$this->setAllComponentStylesheets($config);
 
 		$template = $this->getComponentTemplate($config);
-
-		$template = $this->parseToken($template, "token://logo/src", "/".$this->getConfigOverride($config['src']));
-		$template = $this->parseToken($template, "token://logo/href", $config['href']);
-
+		
+		$content = array(
+			'logo' => array(
+				'src' => "/".$this->getConfigOverride($config['src']),
+				'href' => $config['href'],
+			),
+		);
+		
 		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template);
+		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
 	}
 }
 ?>

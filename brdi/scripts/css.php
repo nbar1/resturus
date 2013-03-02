@@ -1,5 +1,5 @@
 <?php
-ob_start ("ob_gzhandler");
+ob_start("ob_gzhandler");
 header("content-type: text/css; charset: UTF-8");
 header("Cache-Control: max-age=1800");
 

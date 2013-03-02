@@ -1,6 +1,6 @@
 <div class="slider-wrapper theme-default">
 	<div id="slider" class="nivoSlider">
-		<img src="!{image://1}" />
+		<img src="!{token://images/1/}" />
 	</div>
 </div>
 <script>
