@@ -6,7 +6,6 @@ define('STATUS','development');
 //header('Cache-Control: max-age=1800');
 
 
-
 require_once('db.php');
 
 $client = array();
@@ -22,7 +21,7 @@ define('INCLUDES','application/includes/');
 define('CONFIG','config/');
 require_once(INCLUDES."autoloader.class.php");
 
-if($_GET['__e'] == true)
+if(isset($_GET['__e']) && $_GET['__e'] == true)
 {
 		ini_set('display_errors', '1');
 }

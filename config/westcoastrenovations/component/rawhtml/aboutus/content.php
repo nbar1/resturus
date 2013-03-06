@@ -9,6 +9,8 @@ $component_config = array(
 			),
 		),
 		'template' => 'rawhtml/aboutus/content',
+		'columns' => 10,
+		'offset' => 1,
 	),
 );
 ?>

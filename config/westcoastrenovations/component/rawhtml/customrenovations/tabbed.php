@@ -38,6 +38,8 @@ $component_config = array(
 			),
 		),
 		'template' => 'rawhtml/customrenovations/tabbed',
+		'columns' => 10,
+		'offset' => 1,
 	),
 );
 ?>

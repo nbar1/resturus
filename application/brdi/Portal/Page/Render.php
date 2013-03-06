@@ -69,10 +69,13 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	private function setAllPageJavascripts()
 	{
 		$config = $this->getPageConfig();
-		foreach($config['assets']['javascripts'] as $js)
+		if(is_array($config['assets']['javascripts']))
 		{
-			$this->addJavascript($js);
-		}
+			foreach($config['assets']['javascripts'] as $js)
+			{
+				$this->addJavascript($js);
+			}
+		}				
 		return true;
 	}
 
@@ -87,9 +90,12 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	private function setAllPageStylesheets()
 	{
 		$config = $this->getPageConfig();
-		foreach($config['assets']['stylesheets'] as $css)
+		if(is_array($config['assets']['javascripts']))
 		{
-			$this->addStylesheet($css);
+			foreach($config['assets']['stylesheets'] as $css)
+			{
+				$this->addStylesheet($css);
+			}
 		}
 		return true;
 	}

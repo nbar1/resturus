@@ -66,7 +66,7 @@ class brdi_Portal extends brdi
 			switch($type)
 			{
 				case "component":
-					$component = implode("/", $params);
+					$component = implode("/", array_filter($params));
 					$config = $this->getConfigOverride("component/".strtolower($component).".php");
 					if($config !== false)
 					{
