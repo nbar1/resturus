@@ -20,15 +20,13 @@ class brdi_Portal_Component extends brdi_Portal
 		try
 		{
 			$template = (isset($config['template']))?$config['template']:$config['type'];
+			$template = strtolower(str_replace("_", "/", $template));
 			//if($_GET['__e']) echo "trying to load "."assets/templates/components/".strtolower($template)."/view.php<br />";
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
 			if($template !== FALSE)
 			{
 				$template = file_get_contents($template);
-			}
-			else {
-				error_log("Error loading template: ".$template);
 			}
 		}
 		catch(Exception $e)

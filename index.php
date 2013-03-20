@@ -2,6 +2,9 @@
 ob_start ("ob_gzhandler");
 
 define('STATUS','development');
+define('INCLUDES','application/includes/');
+define('CONFIG','config/');
+require_once(INCLUDES."autoloader.class.php");
 
 //header('Cache-Control: max-age=1800');
 
@@ -15,11 +18,6 @@ $assets = array(
 );
 $columns_at = 1;
 $columns_max = 12;
-
-
-define('INCLUDES','application/includes/');
-define('CONFIG','config/');
-require_once(INCLUDES."autoloader.class.php");
 
 if(isset($_GET['__e']) && $_GET['__e'] == true)
 {

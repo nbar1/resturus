@@ -42,19 +42,20 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 	 * @return string Html formatted wrapper of current page
 	 */
 	 
-	private function getPageWrapper()
+	private function getPageWrapper($wrapper = false)
 	{
 		try
 		{
 			$config = $this->getPageConfig();
+			if(!$this->getClientToken()) $config['wrapper'] = "maintenance";
 			$wrapper = (isset($config['wrapper']))?$config['wrapper']:"default";
 			$wrapper = $this->getConfigOverride("assets/templates/wrappers/".$wrapper.".php");
-			$wrapper = file_get_contents($wrapper);
+			return file_get_contents($wrapper);
 		}
 		catch(Exception $e)
 		{
-			echo "Exception: " . $e->getMessage();
-			$wrapper = false;
+			throw new brdi_Exception(304, "Wrapper not found", $this);
+			return false;
 		}
 		return $wrapper;
 	}
@@ -115,6 +116,7 @@ class brdi_Portal_Page_Render extends brdi_Portal_Page
 			'template' => $this->getPageTemplate(),
 			'pageid' => str_replace("/", "_", $this->getPagePath()),
 		);
+
 		$this->setAllPageJavascripts();
 		$this->setAllPageStylesheets();
 		

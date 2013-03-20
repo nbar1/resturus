@@ -3,6 +3,7 @@
 <head>
 	<title>West Coast Renovations</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="shortcut icon" href="favicon.ico" />
 	!{asset://stylesheet/global/}
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	!{asset://javascript/global/}
@@ -21,5 +22,6 @@
 !{component://Footer}
 <br />
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+!{component://Analytics/Google/}
 </body>
 </html>

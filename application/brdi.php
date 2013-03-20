@@ -95,6 +95,10 @@ class brdi
 		{
 			return $client['client_token'];
 		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**

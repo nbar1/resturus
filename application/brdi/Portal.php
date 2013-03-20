@@ -20,21 +20,24 @@ class brdi_Portal extends brdi
 	 */
 	public function getConfigOverride($path)
 	{
-		if(!$path) return false;
-		// check for client level override
-		if(file_exists(CONFIG.$this->getClientToken()."/".$path))
+		try
 		{
-			return CONFIG.$this->getClientToken()."/".$path;
+			if(!$path) return false;
+			// check for client level override
+			if(file_exists(CONFIG.$this->getClientToken()."/".$path))
+			{
+				return CONFIG.$this->getClientToken()."/".$path;
+			}
+			// check for default file
+			elseif(file_exists(CONFIG."default/".$path))
+			{
+				return CONFIG."default/".$path;
+			}
 		}
-		// check for default file
-		elseif(file_exists(CONFIG."default/".$path))
+		catch (brdi_Exception $e)
 		{
-			return CONFIG."default/".$path;
-		}
-		// file not found
-		else
-		{
-			error_log("No assets found at ".$path);
+			echo $path;
+			Throw new brdi_Exception(301, "", $this);
 			return false;
 		}
 	}

@@ -11,6 +11,7 @@
 	width: 40px;
 }
 .component_Twitter .tweet_user_image img {
+	box-shadow: 1px 1px 1px rgba(50, 50, 50, 0.3);
 	height: 60px;
 	width: 60px;
 }
