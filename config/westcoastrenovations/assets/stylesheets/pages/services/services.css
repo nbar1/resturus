@@ -1,0 +1,8 @@
+.page_services ul {
+	list-style-type: disc !important;
+}
+.page_services ul li {
+	display: inline-block;
+	padding: 4px 0;
+	width: 300px;
+}

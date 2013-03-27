@@ -1,3 +1,7 @@
+<p>Renovating your home or condominium should be a positive experience. You need to ensure your renovation is a success. Our design specialists will meet with you, listen to your needs, and provide you with estimates and detailed drawings as well as top notch craftsmanship gained from over 30 years experience. West Coast Renovations crew is professional, fast and personally guaranteed.</p>
+
+<p>West Coast Renovations is a licensed remodeling company, fully insured with liability and workers comp. insurance. Job saftey and your saftey is critical to our success. We will protect all renovation areas from damage and leave the work site clean and orderly. We believe in constant communication throughout the project and we will make every effort to be available via mobile phone, voice mail and e-mail. Our professional services and our commitment to high standards is why West Coast Renovations is Southwest Floridas choice for remodeling.</p>
+
 <ul>
 	<li>State of the Art Dream Kitchens</li>
 	<li>Appliances</li>

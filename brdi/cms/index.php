@@ -5,8 +5,8 @@ session_start();
 		ini_set('display_errors', '1');
 //}
 require_once('../../db.php');
-require_once("../includes/autoloader.class.php");
-	
+require_once("../../application/includes/autoloader.class.php");
+
 $action = (isset($_GET['action']))?$_GET['action']:"dashboard";
 $action_base = explode("/", $action);
 $action_base = $action_base[0];
@@ -31,7 +31,7 @@ $cms_page_html = ob_get_clean();
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/stylesheet" href="/brdi/scripts/css.php?exclude_global=true" />
-<link rel="stylesheet" type="text/stylesheet" href="cms.css" />
+<link rel="stylesheet" type="text/stylesheet" href="/cms/cms.css" />
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>

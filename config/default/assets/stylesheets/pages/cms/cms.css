@@ -1,0 +1,105 @@
+body #content>.span9.well {
+	padding: 8px 30px;
+}
+body .well {
+	padding-bottom: 8px;
+	padding-top: 8px;
+}
+form {
+	margin: 0;
+}
+#wrapper {
+	height: 100%;
+	margin: 15px auto;
+	max-width: 955px;
+}
+.login_wrapper {
+	margin: 0 auto;
+	width: 260px !important;
+}
+.login_wrapper input {
+	width: 245px;
+}
+.login_wrapper button {
+	margin-top: 5px;
+	width: 259px;
+}
+
+
+
+
+.alert .btn {
+	float: right;
+	margin-right: -25px;
+}
+.alert.alert-option {
+	margin-top: 20px;
+	line-height: 30px;
+}
+
+.action_container {
+	display: none;
+}
+
+#content .row-fluid {
+	padding: 10px 0;
+}
+.help-block {
+	color: #999;
+	font-size: 12px;
+	margin: -7px 0 10px 4px;
+}
+
+
+.menu_selector .btn {
+	margin-top: 5px;
+}
+
+
+
+
+
+
+
+/** Menu Edit **/
+#sortable_menuitems {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#sortable_menuitems li.mitem {
+	float: left;
+}
+#sortable_menuitems li.well {
+	background: #f9f9f9;
+}
+#sortable_menuitems li.span6 {
+	margin: 4px 8px 8px 0;
+}
+.mitem {
+	font-size: 12px;
+	height: 150px;
+	position: relative;
+}
+.mitem .mitem_title {
+	display: block;
+	font-size: 18px;
+}
+.mitem .mitem_description {
+	display: block;
+	height: 53px;
+	overflow: hidden;
+	padding: 10px 0;
+}
+.mitem .mitem_price {
+
+}
+.mitem .mitem_tags {
+
+}
+
+.mitem .opt_edit {
+	bottom: 5px;
+	position: absolute;
+	right: 10px;
+}

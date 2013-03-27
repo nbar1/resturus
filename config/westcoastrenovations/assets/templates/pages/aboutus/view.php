@@ -1,1 +1,1 @@
-!{component://rawhtml/aboutus/content}
+!{component://rawhtml/aboutus/}

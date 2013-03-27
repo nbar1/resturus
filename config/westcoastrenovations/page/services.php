@@ -4,10 +4,7 @@ $page_config = array(
 	'href' => '/services/',
 	'assets' => array(
 		'stylesheets' => array(
-		
-		),
-		'javascripts' => array(
-		
+			'assets/stylesheets/pages/services/services.css',
 		),
 	),
 );

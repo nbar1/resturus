@@ -1,3 +1,7 @@
 <div id="linknav">
-	<div class="navlinks">!{token://nav/links/}</div>
+	<div class="navlinks">
+		!{loop://nav/}
+			!{loopvar://nav/[*]/pre/}<a href='!{loopvar://nav/[*]/href/}'>!{loopvar://nav/[*]/title/}</a>
+		!{endloop://nav/}
+	</div>
 </div>

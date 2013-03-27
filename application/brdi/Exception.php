@@ -16,6 +16,9 @@ class brdi_Exception extends Exception
 		305 => "Javascript Not Found",
 		306 => "Stylesheet Not Found",
 		307 => "Token Not Found",
+		/* Component */
+		400 => "Error Loading Component",
+		401 => "Error Loading Component Config",
 		
 		/* Custom Components */
 		/* Twitter */
@@ -24,7 +27,7 @@ class brdi_Exception extends Exception
 	
 	public function __construct($err_code, $err_info="", $scope="outside", $insert_into_db=true)
 	{
-		parent::__construct();
+		parent::__construct($err_info, $err_code);
 		$error = array(
 			'err_code' => $err_code,
 			'err_type' => $this->_error_codes[$err_code],

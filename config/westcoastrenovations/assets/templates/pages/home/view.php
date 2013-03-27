@@ -1,3 +1,3 @@
-!{component://imageslider/homepage}
-!{component://location}
-!{component://twitter}
+!{component://imageslider/homepage/}
+!{component://location/}
+!{component://twitter/}

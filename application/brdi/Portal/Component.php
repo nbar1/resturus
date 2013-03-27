@@ -26,7 +26,7 @@ class brdi_Portal_Component extends brdi_Portal
 			$template_path = $template;
 			if($template !== FALSE)
 			{
-				$template = file_get_contents($template);
+				$template = @file_get_contents($template);
 			}
 		}
 		catch(Exception $e)
@@ -141,5 +141,27 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 
 		return $wrapper;
+	}
+	
+	/**
+	 * getImagesFromCategory
+	 */
+	public function getImagesFromCategory($category)
+	{
+		global $db;
+		$data = array($this->getClientId(), $category, 1);
+		$dbh = $db->prepare("SELECT * FROM client_images WHERE client_id=? AND image_category=? AND image_active=?");
+		$dbh->execute($data);
+		$dbh->setFetchMode(PDO::FETCH_ASSOC);				
+		$images = $dbh->fetchAll();
+		foreach($images as $k=>$image)
+		{
+			$images[$k]['src'] = "cmsimages/".$images[$k]['image_filename'];
+			$images[$k]['src_thumb'] = "cmsimages/thumbs/".$images[$k]['image_filename'];
+			$images[$k]['description'] = $images[$k]['image_description'];
+			$images[$k]['title'] = $images[$k]['image_title'];
+			unset($images[$k]['image_title'], $images[$k]['image_filename'], $images[$k]['image_description']);
+		}
+		return $images;
 	}
 }

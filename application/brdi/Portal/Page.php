@@ -23,11 +23,14 @@ class brdi_Portal_Page extends brdi_Portal
 			// get page config file
 			$page = "page/".$this->getPagePath().".php";
 			$page = $this->getConfigOverride($page);
+			
 
 			if($page)
 			{
 				// include $page_config
 				require($page);
+				if(!isset($page_config['assets']['javascripts'])) $page_config['assets']['javascripts'] = array();
+				if(!isset($page_config['assets']['stylesheets'])) $page_config['assets']['stylesheets'] = array();
 				// set local $page_config to public $page_config
 				$this->page_config = $page_config;
 				return $this->page_config;

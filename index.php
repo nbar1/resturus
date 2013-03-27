@@ -1,5 +1,5 @@
 <?php
-ob_start ("ob_gzhandler");
+//ob_start ("ob_gzhandler");
 
 define('STATUS','development');
 define('INCLUDES','application/includes/');

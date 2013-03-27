@@ -6,21 +6,21 @@ if(isset($_POST['do']))
 	switch($_POST['do'])
 	{
 		case 'login':
-			
+
 			if(!$_POST['clientid']) array_push($errors, "You must enter your Client ID");
 			if(!$_POST['clientpassword']) array_push($errors, "You must enter your password");
-			
+
 			if(empty($errors))
 			{
 				$clientid = $_POST['clientid'];
 				$clientpassword = md5($_POST['clientpassword']);
-	
+
 				$data = array($clientid, $clientpassword, 1);
 				$dbh = $db->prepare("SELECT * FROM clients WHERE client_token=? AND client_password=? AND client_active=? LIMIT 1");
 				$dbh->execute($data);
 				$dbh->setFetchMode(PDO::FETCH_ASSOC);
 				$client = $dbh->fetch();
-				
+
 				if($client === false)
 				{
 					array_push($errors, "Invalid Client ID / Password");
@@ -36,7 +36,7 @@ if(isset($_POST['do']))
 ?>
 <div id="content" class="row-fluid">
 	<div class="span4 offset4">
-		<form action="/brdi/cms/?action=login" method="POST">
+		<form action="/cms/?action=login" method="POST">
 			<input type="hidden" name="do" value="login">
 			<div class="login_wrapper well">
 				<legend>Login</legend>

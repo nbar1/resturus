@@ -1,0 +1,20 @@
+.rg-view {
+	display: none;
+}
+.es-carousel-wrapper,
+.es-carousel,
+.rg-image-wrapper {
+	background: none !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+.rg-image-wrapper {
+	padding: 0;
+}
+.es-carousel > ul {
+	width: 9999px !important;
+}
+.es-carousel > ul > li {
+	height: 100px !important;
+	width: auto !important;
+}

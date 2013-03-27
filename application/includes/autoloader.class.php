@@ -12,7 +12,7 @@ class Autoloader
 		$file = "application/" . $class_path . '.php';
 		if(!file_exists($file))
 		{
-			echo 'The file containing the requested class was not found: ' . $class;
+			return false;
 			exit;
 		}
 		require_once($file);

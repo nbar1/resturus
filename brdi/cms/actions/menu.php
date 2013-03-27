@@ -7,7 +7,7 @@ $dbh->execute($data);
 $dbh->setFetchMode(PDO::FETCH_ASSOC);
 $menus = $dbh->fetchAll();
 
-if($menus === false)
+if(sizeof($menus) < 1)
 {
 	array_push($errors, "You have no menus, would you like to add one? <a href='?action=menu/addmenu' class='btn btn-info'>Add Menu</a>");
 }

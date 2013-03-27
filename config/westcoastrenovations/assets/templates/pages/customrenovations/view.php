@@ -1,1 +1,1 @@
-!{component://rawhtml/customrenovations/tabbed}
+!{component://rawhtml/customrenovations/}

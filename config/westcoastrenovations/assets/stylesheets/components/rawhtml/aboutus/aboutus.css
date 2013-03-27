@@ -1,0 +1,18 @@
+body #content.page_aboutus .component_RawHtml {
+	padding: 20px;
+}
+.page_aboutus .header_text {
+	font-size: 18px;
+	margin: 10px 0 20px;
+	text-align: center;
+}
+.aff_container {
+	text-align: center;
+	vertical-align: center;
+}
+.aff_container img.nkba {
+	margin-top: 25px;
+}
+.aff_container img.bia {
+	margin-top: 15px;
+}

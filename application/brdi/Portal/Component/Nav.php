@@ -58,11 +58,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		$template = $this->getComponentTemplate($config);
 		
 		$content = array(
-			'nav' => array(
-				'page' => $this->getNavBar(),
-				'mobile' => $this->getNavBar(true),
-				'links' => $this->getNavLinks(),
-			),
+			'nav' => $this->getNav(),
 			'page' => array(
 				'title' => $this->getClientName(),
 			),
@@ -81,6 +77,40 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
 	}
 
+	private function getNav()
+	{
+		$navitems = array();
+		foreach($this->nav as $navitem)
+		{
+			@include($this->getConfigOverride("/page/".$navitem.".php"));
+			if($page_config)
+			{
+				if($this->isThisPage($navitem)) 
+				{
+					$this->pageTitle = $page_config['title'];
+				}
+				
+				$nav_builder = array(
+					'title' => $page_config['title'],
+					'href' => $page_config['href'],
+					'class' => "",
+					'active_class' => "",
+					'first' => "",
+					'pre' => "&nbsp;&nbsp;|&nbsp;&nbsp;",
+					
+				);
+				if(isset($page_config['class'])) $nav_builder['class'] = $page_config['class'];
+				if($this->isThisPage($navitem)) $nav_builder['active_class'] = "active";
+				if($navitem == $this->nav[0])
+				{
+					$nav_builder['first'] = "first";
+					$nav_builder['pre'] = "";
+				}
+				array_push($navitems, $nav_builder);
+			}
+		}
+		return $navitems;
+	}
 	/**
 	 * getPageNav
 	 *
