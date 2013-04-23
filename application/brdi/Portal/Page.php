@@ -25,6 +25,14 @@ class brdi_Portal_Page extends brdi_Portal
 				// get page config file
 				$page = "Page/".$this->getPagePath()."/page_config.php";
 				$page = $this->getConfigOverride($page);
+				
+				if($page === null)
+				{
+					header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+					header("Status: 404 Not Found");
+					$_SERVER['REDIRECT_STATUS'] = 404;
+					$page = $this->getConfigOverride("Page/Error/404/page_config.php");
+				}
 
 				if($page && file_exists($page))
 				{
@@ -48,6 +56,8 @@ class brdi_Portal_Page extends brdi_Portal
 					return $this->_page_config;
 				}
 				else {
+					// 404
+					
 					throw new brdi_Exception("Error loading page config", 401);
 				}
 			}
