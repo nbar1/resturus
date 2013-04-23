@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+Options +FollowSymLinks
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^cms/(.*)$  cms/index.php/$1 [PT,L]
+RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png [L,NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [PT,L]
+
+</IfModule>
+<IfModule !mod_rewrite.c>
+ErrorDocument 404 /index.php
+</IfModule>
+
+<filesMatch "\.(ico|gif|jpg|png|js)$">
+ExpiresActive On
+ExpiresDefault "access plus 5 minute"
+Header append Cache-Control "public"
+</filesMatch>
