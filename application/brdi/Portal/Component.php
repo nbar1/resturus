@@ -7,6 +7,107 @@
  */
 class brdi_Portal_Component extends brdi_Portal
 {
+	protected $_global_params = array(
+		'assets' => array(
+			'javascripts' => array(),
+			'stylesheets' => array(),
+			'template' => 'template://components/error/view/',
+		),
+		'class' => '',
+		'columns' => 12,
+		'component_title' => "COMPONENT",
+		'offset' => 0,
+		'show_component_title' => false,
+		'wrapper' => true,
+	);
+
+	public function __construct($params = array())
+	{
+		$params = $this->mergeParams($params);
+		$this->setParams($params);
+		$this->setAllComponentJavascripts($params);
+		$this->setAllComponentStylesheets($params);
+		$this->setTemplate($params['assets']['template']);
+		if($params['wrapper'] === true)
+		{
+			$this->setTemplate($this->buildComponentWrapper($this->getTemplate(), $this->getParams()));
+		}
+	}
+	
+	private function mergeParams($params)
+	{
+		$assets = array();
+		// stylesheets
+		if(!isset($this->_params['assets']['stylesheets']) && isset($params['assets']['stylesheets']))
+		{
+			$assets['stylesheets'] = array_merge($this->_global_params['assets']['stylesheets'], $params['assets']['stylesheets']);
+		}
+		elseif(isset($this->_params['assets']['stylesheets']) && !isset($params['assets']['stylesheets']))
+		{
+			$assets['stylesheets'] = array_merge($this->_global_params['assets']['stylesheets'], $this->_params['assets']['stylesheets']);
+		}
+		elseif(isset($this->_params['assets']['stylesheets']) && isset($params['assets']['stylesheets']))
+		{
+			$assets['stylesheets'] = array_merge($this->_global_params['assets']['stylesheets'], $this->_params['assets']['stylesheets'], $params['assets']['stylesheets']);
+		}
+		else
+		{
+			$assets['stylesheets'] = $this->_global_params['assets']['stylesheets'];	
+		}
+		// javascripts
+		if(!isset($this->_params['assets']['javascripts']) && isset($params['assets']['javascripts']))
+		{
+			$assets['javascripts'] = array_merge($this->_global_params['assets']['javascripts'], $params['assets']['javascripts']);
+		}
+		elseif(isset($this->_params['assets']['javascripts']) && !isset($params['assets']['javascripts']))
+		{
+			$assets['javascripts'] = array_merge($this->_global_params['assets']['javascripts'], $this->_params['assets']['javascripts']);
+		}
+		elseif(isset($this->_params['assets']['javascripts']) && isset($params['assets']['javascripts']))
+		{
+			$assets['stylesheets'] = array_merge($this->_global_params['assets']['javascripts'], $this->_params['assets']['javascripts'], $params['assets']['javascripts']);
+		}
+		else
+		{
+			$assets['javascripts'] = $this->_global_params['assets']['javascripts'];	
+		}
+		// template
+		if(isset($params['assets']['template']))
+		{
+			$assets['template'] = $params['assets']['template'];
+		}
+		elseif(isset($this->_params['assets']['template']))
+		{
+			$assets['template'] = $this->_params['assets']['template'];
+		}
+		else
+		{
+			$assets['template'] = $this->_globalparams['assets']['template'];
+		}
+		$params = array_merge($this->_global_params, $this->_params, $params);
+		$params['assets'] = $assets;
+		return $params;
+	}
+	
+	public function buildComponent()
+	{
+		$params = $this->getParams();
+
+		if(isset($params['action']) && is_callable(array($this, $action)))
+		{
+			$action = $params['action'];
+			return $this->$action();
+		}
+		elseif(method_exists($this, "actionDefault"))
+		{
+			return $this->actionDefault();
+		}
+		else
+		{
+			return array($this->getTemplate(), $this->getContent(), $this->getParams());
+		}
+	}
+
 	/**
 	 * getComponentTemplate
 	 *
@@ -17,10 +118,10 @@ class brdi_Portal_Component extends brdi_Portal
 	 */
 	public function getComponentTemplate($config)
 	{
+		var_dump($_SERVER);
 		try
 		{
-			$template = (isset($config['template']))?$config['template']:$config['type'];
-			$template = strtolower(str_replace("_", "/", $template));
+			$template = strtolower(str_replace("_", "/", $config['template']));
 			//if($_GET['__e']) echo "trying to load "."assets/templates/components/".strtolower($template)."/view.php<br />";
 			$template = $this->getConfigOverride("assets/templates/components/".strtolower($template)."/view.php");
 			$template_path = $template;
@@ -128,8 +229,12 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
 		if(!isset($config['class'])) $config['class'] = "";
-		$wrapper .= "<div class=\"component ".trim($wrapper_class." component_".$config['type']." ".$config['class'])."\">";
-		$wrapper .= $template;
+		$wrapper .= "<div class=\"component ".trim($wrapper_class." component_".get_class($this)." ".$config['class'])."\">";
+		if($config['show_component_title'] === true)
+		{
+			$wrapper .= "<div class=\"comp_header\">{$config['component_title']}</div>";
+		}
+		$wrapper .= "<div class=\"comp_body\">{$template}</div>";
 		$wrapper .= "</div>";
 
 		$columns_at += $columns + $offset;
@@ -163,5 +268,10 @@ class brdi_Portal_Component extends brdi_Portal
 			unset($images[$k]['image_title'], $images[$k]['image_filename'], $images[$k]['image_description']);
 		}
 		return $images;
+	}
+	
+	public function __get($x)
+	{
+		return "hello";
 	}
 }

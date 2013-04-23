@@ -1,0 +1,16 @@
+body {
+	background: #000;
+	font-family: 'Prata', serif;
+}
+.homepage_header_container {
+	margin-top: 175px;
+	text-align: center;
+}
+.homepage_header {
+	font-size: 216px;
+}
+.homepage_subheader {
+	font-size: 48px;
+	font-weight: 300;
+	margin-top: 150px;
+}

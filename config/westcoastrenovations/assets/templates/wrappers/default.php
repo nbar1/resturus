@@ -3,7 +3,7 @@
 <head>
 	<title>West Coast Renovations</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="favicon.ico?v=2" />
 	!{asset://stylesheet/global/}
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	!{asset://javascript/global/}
@@ -13,11 +13,11 @@
 	<![endif]-->
 </head>
 <body>
-!{component://Logo}
-!{component://Nav}
+!{component://Logo/}
+!{component://Nav/}
 <div class="clearfix"></div>
 <div id="content" class="container-fluid page_!{token://page}">
-	!{template://internal}
+	!{template://internal/}
 </div>
 !{component://Footer}
 <br />

@@ -4,7 +4,7 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 	private $oauth;
 	public $config;
 	
-	protected $_brdi_Portal_Component_Twitter = array(
+	protected $_params = array(
 		'auth' => array(
 			'consumer_key' => 's1FJp5hbIJGl4QKTM86TzA',
 			'consumer_secret' => 'qWTvI8BOPfxujgs6BXmIEYV3oBkXLLG5Ey9u1GA856A',
@@ -20,47 +20,37 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 			'stylesheets' => array(
 				'assets/stylesheets/components/twitter/timeline.css',
 			),
+			'template' => 'template://components/twitter/view/',
 		),
 		'columns' => 6,
-		'offset' => 0,
-		'class' => '',
 	);
 
-	public function build($config)
+
+	public function actionDefault()
 	{
-		$this->config = array_merge($this->_brdi_Portal_Component_Twitter, $config['config'], array('type' => $config['type']));
+		$params = $this->getParams();
 
-		if($this->config['scroll_tweets'] === true)
+		if($params['scroll_tweets'] === true)
 		{
-			$this->config['class'] .= " scroll";
+			$params['class'] .= " scroll";
 		}
-
-		$response = $this->getTimelineTweets($this->config['user']);
-		$tweets = array_slice($response, 0, $this->config['limit']);
-
-		// set component assets
-		$this->setAllComponentJavascripts($this->config);
-		$this->setAllComponentStylesheets($this->config);
-
-		$template = $this->getComponentTemplate($this->config);
-
-		$params = array('tweets' => $this->buildTimeline($tweets));
-
-		$template = $this->buildComponentWrapper($template, $this->config);
-
-		return array(array($this->javascripts, $this->stylesheets), $template, $params, $config);
 		
+		$tweets = array_slice($this->getTimelineTweets($params['user']), 0, $params['limit']);
+		
+		$content = array('tweets' => $this->buildTimeline($tweets));
+		
+		$this->setContent($content);
+		$this->setParams($params);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
-
-
-
-
 
 
 	private function buildTimeline($tweets)
 	{
+		$params = $this->getParams();
+		if(isset($tweets['errors'][0]['code']) && $tweets['errors'][0]['code'] == 215) return "Error";
 		$all_tweets = "";
-		if($this->config['show_twitter_logo'] === true)
+		if($params['show_twitter_logo'] === true)
 		{
 			$all_tweets .= "<div class='twitter_logo'></div>";
 		}
@@ -135,19 +125,20 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 
 	private function getTimelineTweets($user)
 	{
+		$params = $this->getParams();
 		$this->oauth = array(
-			'oauth_consumer_key' => $this->config['auth']['consumer_key'],
+			'oauth_consumer_key' => $params['auth']['consumer_key'],
 			'oauth_nonce' => time(),
 			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_token' => $this->config['auth']['oauth_access_token'],
+			'oauth_token' => $params['auth']['oauth_access_token'],
 			'oauth_timestamp' => time(),
 			'oauth_version' => '1.0',
 			'screen_name' => $user,
-			'exclude_replies' => $this->config['exclude_replies'],
+			'exclude_replies' => $params['exclude_replies'],
 		);
 
 		$base_info = $this->buildBaseString("https://api.twitter.com/1.1/statuses/user_timeline.json", "GET", $this->oauth);
-		$composite_key = rawurlencode($this->config['auth']['consumer_secret']) . '&' . rawurlencode($this->config['auth']['oauth_access_token_secret']);
+		$composite_key = rawurlencode($params['auth']['consumer_secret']) . '&' . rawurlencode($params['auth']['oauth_access_token_secret']);
 		$oauth_signature = base64_encode(hash_hmac('sha1', $base_info, $composite_key, true));
 		$this->oauth['oauth_signature'] = $oauth_signature;
 		
@@ -155,7 +146,7 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 		$options = array(
 			CURLOPT_HTTPHEADER => $header,
 			CURLOPT_HEADER => false,
-			CURLOPT_URL => "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$user."&exclude_replies=".$this->config['exclude_replies'],
+			CURLOPT_URL => "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$user."&exclude_replies=".$params['exclude_replies'],
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_SSL_VERIFYPEER => false,
 		);

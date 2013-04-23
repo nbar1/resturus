@@ -9,7 +9,7 @@
 	float: none;
 }
 #mainnav .navbar-inner ul.nav li>a{
-	padding: 10px 29px 10px 24px;
+	padding: 10px 25px 10px 25px;
 }
 #mainnav .navbar-inner ul.nav li.active {
 	margin-left: -5px;

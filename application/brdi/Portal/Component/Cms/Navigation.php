@@ -8,7 +8,7 @@
 class brdi_Portal_Component_Cms_Navigation extends brdi_Portal_Component_Cms
 {
 
-	private $_brdi_Portal_Component_Cms_Navigation = array(
+	protected $_params = array(
 		'nav' => array(
 			'account' => array(
 				'title' => 'Account',
@@ -58,7 +58,9 @@ class brdi_Portal_Component_Cms_Navigation extends brdi_Portal_Component_Cms
 			'stylesheets' => array(
 				'assets/stylesheets/components/cms/navigation/navigation.css',
 			),
+			'template' => 'template://components/cms/navigation/view/',
 		),
+		'wrapper' => false,
 	);
 
 	/**
@@ -71,24 +73,13 @@ class brdi_Portal_Component_Cms_Navigation extends brdi_Portal_Component_Cms
 	 */
 	public function build($config)
 	{
-		$config = array_merge($this->_brdi_Portal_Component_Cms_Navigation, $config);
-
-		$this->setAllComponentJavascripts($config);
-		$this->setAllComponentStylesheets($config);
-
-		$template = $this->getComponentTemplate($config);
-		
+		$params = $this->getParams();
 		$content = array(
-			'nav' => $config['nav'],
+			'nav' => $params['nav'],
 		);
 
-		//$template = $this->buildComponentWrapper($template, $config);
-		if(isset($config['uri']))
-		{
-			$attr = $this->getUriAttr($config['uri']);
-		}
-
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		$this->setContent($content);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }
 ?>

@@ -1,0 +1,13 @@
+<?php
+return new brdi_Portal_Component_RawHtml(array(
+	'html' => array(),
+	'assets' => array(
+		'stylesheets' => array(
+			'assets/stylesheets/components/rawhtml/aboutus/aboutus.css',
+		),
+		'template' => 'template://components/rawhtml/aboutus/view/',
+	),
+	'columns' => 10,
+	'offset' => 1,
+));
+?>

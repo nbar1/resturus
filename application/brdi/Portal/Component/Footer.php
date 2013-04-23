@@ -7,46 +7,42 @@
  */
 class brdi_Portal_Component_Footer extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_Footer = array(
+	protected $_params = array(
 		'subfooter_html' => '',
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/footer/footer.css',
 			),
+			'template' => 'template://components/footer/view/',
 		),
+		'subfooter_html' => '',
 	);
 
 	/**
-	 * build
+	 * actionDefault
 	 *
 	 * Builds component and returns data for Portal to render it
 	 *
 	 * @param Array $config Component configuration
 	 * @return Array Assets and template for component
 	 */
-	public function build($config)
+
+	public function actionDefault()
 	{
-		$config = array_merge($this->_brdi_Portal_Component_Footer, $config['config'], array('type' => $config['type']));
+		$params = $this->getParams();
 
-		// set component assets
-		$this->setAllComponentJavascripts($config);
-		$this->setAllComponentStylesheets($config);
-
-		$template = $this->getComponentTemplate($config);
-		
 		$content = array(
 			'global' => array(
 				'year' => date("Y"),
 			),
-			'subfooter' => $config['subfooter_html'],
+			'subfooter' => $params['subfooter_html'],
 			'client' => array(
 				'name' => $this->getClientName(),
 			),
 		);
 
-		$template = $this->buildComponentWrapper($template, $config);
-
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		$this->setContent($content);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }
 ?>

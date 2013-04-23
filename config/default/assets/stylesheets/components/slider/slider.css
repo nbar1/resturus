@@ -5,3 +5,6 @@
 	margin-top: 0;
 	padding: 0;
 }
+#content .hp_component.slider-wrapper .comp_body {
+	padding: 0;
+}

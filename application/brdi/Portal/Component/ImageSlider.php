@@ -7,7 +7,7 @@
  */
 class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_ImageSlider = array(
+	protected $_params = array(
 		'images' => array(),
 		'image_category' => false,
 		'assets' => array(
@@ -18,9 +18,9 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 			'javascripts' => array(
 				'assets/javascripts/components/slider/jquery.nivo.slider.pack.js',
 			),
+			'template' => 'template://components/imageslider/view/',
 		),
 		'class' => 'slider-wrapper',
-		'columns' => 12,
 	);
 	/**
 	 * build
@@ -30,35 +30,31 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 	 * @param Array $config Component configuration
 	 * @return Array Assets and template for component
 	 */
-	public function build($config)
+	public function actionDefault()
 	{
-		$config = array_merge($this->_brdi_Portal_Component_ImageSlider, $config['config'], array('type' => $config['type']));
-		$this->setAllComponentJavascripts($config);
-		$this->setAllComponentStylesheets($config);
-
-		$template = $this->getComponentTemplate($config);
+		$params = $this->getParams();
 		
-		if($config['image_category'] !== false)
+		if($params['image_category'] !== false)
 		{
-			$config['images'] = $this->getImagesFromCategory($config['image_category']);
+			$params['images'] = $this->getImagesFromCategory($params['image_category']);
 		}
-
+		
+		$content = array();
 		$x=1;
-		foreach($config['images'] as $image)
+		foreach($params['images'] as $image)
 		{
-			if($config['image_category'] === false)
+			if($params['image_category'] === false)
 			{
 				$content['images'][$x] = $this->getConfigOverride($image);
 			}
 			else
 			{
-				$content['images'][$x] = $config['images'][$x-1]['src'];
+				$content['images'][$x] = $params['images'][$x-1]['src'];
 			}
 			$x++;
 		}
 
-		$template = $this->buildComponentWrapper($template, $config);
-
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		$this->setContent($content);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }

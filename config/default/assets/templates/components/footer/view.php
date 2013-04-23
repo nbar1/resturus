@@ -1,5 +1,5 @@
 <div id="footer">
-	!{component://nav/links}
+	!{component://Nav/Links/}
 	<div class="row-fluid">
 		<div class="span12 subfooter">
 			!{html://subfooter/}

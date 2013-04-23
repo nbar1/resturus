@@ -7,7 +7,7 @@
  */
 class brdi_Portal_Component_RawHtml extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_RawHtml = array(
+	protected $_params = array(
 		'html' => array(),
 	);
 
@@ -19,18 +19,15 @@ class brdi_Portal_Component_RawHtml extends brdi_Portal_Component
 	 * @param Array $config Component configuration
 	 * @return Array Assets and template for component
 	 */
-	public function build($config)
+
+	public function actionDefault()
 	{
-		$config = array_merge($this->_brdi_Portal_Component_RawHtml, $config['config'], array('type' => $config['type']));
-		$this->setAllComponentJavascripts($config);
-		$this->setAllComponentStylesheets($config);
-		$template = $this->getComponentTemplate($config);
+		$params = $this->getParams();
 
-		$params = $config['html'];
+		$content = $params['html'];
 
-		$template = $this->buildComponentWrapper($template, $config);
-
-		return array(array($this->javascripts, $this->stylesheets), $template, $params, $config);
+		$this->setContent($content);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }
 ?>

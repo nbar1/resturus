@@ -7,13 +7,14 @@
  */
 class brdi_Portal_Component_Logo extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_Logo = array(
+	protected $_params = array(
 		'src' => 'assets/images/components/logo/logo.png',
 		'href' => '/',
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/logo/logo.css',
 			),
+			'template' => 'template://components/logo/view/',
 		),
 	);
 
@@ -25,25 +26,19 @@ class brdi_Portal_Component_Logo extends brdi_Portal_Component
 	 * @param Array $config Component configuration
 	 * @return Array Assets and template for component
 	 */
-	public function build($config)
+	public function actionDefault()
 	{
-		$config = array_merge($this->_brdi_Portal_Component_Logo, $config['config'], array('type' => $config['type']));
+		$params = $this->getParams();
 
-		$this->setAllComponentJavascripts($config);
-		$this->setAllComponentStylesheets($config);
-
-		$template = $this->getComponentTemplate($config);
-		
 		$content = array(
 			'logo' => array(
-				'src' => "/".$this->getConfigOverride($config['src']),
-				'href' => $config['href'],
+				'src' => "/".$this->getConfigOverride($params['src']),
+				'href' => $params['href'],
 			),
 		);
-		
-		$template = $this->buildComponentWrapper($template, $config);
 
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		$this->setContent($content);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }
 ?>

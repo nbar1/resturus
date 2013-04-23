@@ -1,8 +1,20 @@
 body #content.page_services .component_RawHtml {
 	padding: 20px;
 }
-.page_services .header_text {
-	font-size: 18px;
-	margin: 10px 0 20px;
-	text-align: center;
+#content .component_brdi_Portal_Component_RawHtml .comp_body {
+	padding: 30px;
+}
+#content .component_brdi_Portal_Component_RawHtml .comp_body ul {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	margin-left: 100px;
+}
+#content .component_brdi_Portal_Component_RawHtml .comp_body ul>li {
+	padding: 8px 0;
+}
+@media (max-width: 767px) {
+	#content .component_brdi_Portal_Component_RawHtml .comp_body ul {
+		margin: 0;
+	}
 }

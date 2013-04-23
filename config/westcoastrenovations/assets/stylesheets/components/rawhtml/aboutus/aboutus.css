@@ -1,10 +1,9 @@
-body #content.page_aboutus .component_RawHtml {
+body #content.page_aboutus .component_brdi_Portal_Component_RawHtml {
+	font-size: 15px;
 	padding: 20px;
 }
 .page_aboutus .header_text {
-	font-size: 18px;
-	margin: 10px 0 20px;
-	text-align: center;
+	font-size: 22px;
 }
 .aff_container {
 	text-align: center;

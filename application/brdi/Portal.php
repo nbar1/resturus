@@ -84,7 +84,7 @@ class brdi_Portal extends brdi
 			{
 				case "component":
 					$component = implode("/", array_filter($params));
-					if(strtolower($component) == "pageaction")
+					if(false /*strtolower($component) == "pageaction"*/)
 					{
 						$template = $this->loadCmsComponent(array(
 							'template' => $template,
@@ -92,33 +92,25 @@ class brdi_Portal extends brdi
 							'config' => $config,
 							'rawtoken' => $raw_token,
 							'tokenparams' => $params,
-						));					}
+						));
+					}
 					else
 					{
-						$config = $this->getConfigOverride("component/".strtolower($component)."/component.php");
+						$config = $this->getConfigOverride("Components/".$component."/component_config.php");
 						if($config)
 						{
 							try
 							{
-								include($config);
-					
-								if($component_config)
-								{
-									// build component class
-									$comp_class = 'brdi_Portal_Component_'.$component_config['type'];
-									$comp_builder = new $comp_class();
-									// run build function
-									$component_return = $comp_builder->build($component_config);
-									//set component variables
-									$component_assets = $component_return[0];
-									$component_html = $this->renderTokens($component_return[1], $component_return[2], $component_return[3]);
-									//parse token against given content
-									$template = $this->replaceToken($template, $raw_token, $component_html, false);
-									unset($component_config);
-								}
-								else {
-									$template = $this->replaceToken($template, $raw_token, "Error loading component: ".$component, false);
-								}
+								// get component
+								$component_obj = $this->parseComponent($config);
+								
+								$component_return = $component_obj->buildComponent();
+								
+								//set component variables
+								$component_html = $this->renderTokens($component_return[0], $component_return[1], $component_return[2]);
+								//parse token against given content
+								$template = $this->replaceToken($template, $raw_token, $component_html, false);
+								unset($component_config);
 							}
 							catch (brdi_Exception $e)
 							{
@@ -133,11 +125,11 @@ class brdi_Portal extends brdi
 				break;
 
 				case "html":
-					$template = $this->replaceToken($template, $raw_token, $this->getContent($params, $content));
+					$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
 				break;
 
 				case "if";
-					if($this->getContent($params[0], $content) === true)
+					if($this->getContentValue($params[0], $content) === true)
 					{
 						$this->replaceToken($template, $raw_token, "");
 						$this->replaceToken($template, "!{endif://{$params[0]}/}", "");
@@ -151,7 +143,7 @@ class brdi_Portal extends brdi
 				
 				case "loop":
 					$loop = implode("/", array_filter($params));
-					$loopdata = $this->getContent($params[0], $content);
+					$loopdata = $this->getContentValue($params[0], $content);
 					if(is_array($loopdata))
 					{
 						$count = sizeof($loopdata);
@@ -168,7 +160,7 @@ class brdi_Portal extends brdi
 				break;
 				
 				case "loopvar":
-					$template = $this->replaceToken($template, $raw_token, $this->getContent($params, $content));
+					$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
 				break;
 
 				case "image":
@@ -185,7 +177,7 @@ class brdi_Portal extends brdi
 				break;
 
 				case "token":
-					$template = $this->replaceToken($template, $raw_token, $this->getContent($params, $content));
+					$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
 				break;
 			}
 		}
@@ -221,7 +213,7 @@ class brdi_Portal extends brdi
 		}
 		catch(Exception $e)
 		{
-			Throw new brdi_Exception(300);
+			throw new brdi_Exception(300);
 		}
 		// run build function
 		$component_return = $comp_builder->build(array('type'=>$cms_component, 'uri'=>$full_class, 'config'=>array()));
@@ -232,6 +224,28 @@ class brdi_Portal extends brdi
 		$template = $this->replaceToken($params['template'], $params['rawtoken'], $component_html, false);
 		return $template;
 
+	}
+	
+	private function parseComponent($config)
+	{
+		try
+		{
+			$component_config = @file_get_contents($config);
+			if($component_config)
+			{
+				$component_config = trim(str_replace(array("<?php","<?","?>"), "", $component_config));
+				return eval($component_config);
+			}
+			else
+			{
+				throw new brdi_Exception("Error loading component", 400);
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
 	}
 
 	/**
@@ -300,7 +314,7 @@ class brdi_Portal extends brdi
 	}
 	
 	/**
-	 * getContent
+	 * getContentValue
 	 *
 	 * Parses the content
 	 *
@@ -308,7 +322,7 @@ class brdi_Portal extends brdi
 	 * @param Array $content Content values
 	 * @return String
 	 */
-	private function getContent($type, $content)
+	private function getContentValue($type, $content)
 	{
 		if(is_array($type))
 		{
@@ -354,14 +368,13 @@ class brdi_Portal extends brdi
 	 */
 	public function tokenize($config)
 	{
-		global $assets;
 		$template = $config['wrapper'];
 		
 		//$template = $this->replaceToken($template, "!{token://page}", $config['pageid']);
-		$template = $this->replaceToken($template, "!{template://internal/}", $config['template']);
+		$template = $this->replaceToken($template, "!{template://internal/}", $config['assets']['template']);
 		// migrate from replace below - always end in trailing slash
-		$template = $this->replaceToken($template, "!{template://internal}", $config['template']);
-		$template = $this->renderTokens($template, array('page' => $config['pageid']), $config);
+		$template = $this->replaceToken($template, "!{template://internal}", $config['assets']['template']);
+		$template = $this->renderTokens($template, array('page' => strtolower($config['pageid'])), $config);
 		
 		
 		
@@ -394,7 +407,7 @@ class brdi_Portal extends brdi
 		else {
 			// add local file
 			$js = $this->getConfigOverride($javascript);
-			if($js) array_push($assets['javascripts'], $this->getConfigOverride($javascript));
+			if($js) array_push($assets['javascripts'], $js);
 		}
 		return true;
 	}
@@ -419,7 +432,7 @@ class brdi_Portal extends brdi
 		else {
 			// add local file
 			$css = $this->getConfigOverride($stylesheet);
-			if($css) array_push($assets['stylesheets'], $this->getConfigOverride($stylesheet));
+			if($css) array_push($assets['stylesheets'], $css);
 		}
 		return true;
 	}
@@ -468,42 +481,167 @@ class brdi_Portal extends brdi
 		$html = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/brdi/scripts/css.php?load=".urlencode(json_encode($css_files))."\" />";
 		return $html;
 	}
-
+	
 	/**
-	 * getPagePath
+	 * setTemplate
 	 *
-	 * Get page path
+	 * Get template override and set
 	 *
-	 * @return String Page path
+	 * @param string template uri
+	 * @return bool
 	 */
-	public function getPagePath($checkcms=true)
+	public function setTemplate($template)
 	{
-		$page = strtolower(str_replace("/index.php","", $_SERVER['REQUEST_URI']));
-
-		$page = explode("?",$page);
-		$page = $page[0];
-		// if blank, set as homepage
-		if(!$page || $page == "/") $page = "home";
-
-		$page_batch = explode("/", $page);
-		// convert to path
-		$page = (substr($page, -1) == "/")?substr($page, 0, -1):$page;
-		$page = ($page[0] == "/")?substr($page, 1):$page;
-		$page_batch = explode("/", $page);
-		if($checkcms) { if($page_batch[0] == "cms") return "cms"; }
-		return $page;
+		try
+		{
+			// If passed a uri, get the template
+			if($this->isUri($template))
+			{
+				$uri = $this->parseUri($template);
+				$template_path = strtolower($uri['type']."s/".$uri['path'].".php");
+				$template = $this->getConfigOverride("assets/".$template_path);
+				$template = @file_get_contents($template);
+				if($template === false)
+				{
+					throw new brdi_Exception("Template uri pointed to invalid template");
+				}
+			}
+			
+			if($template)
+			{
+				$this->_template = $template;
+				return true;
+			}
+			else
+			{
+				throw new brdi_Exception("Template returned as false");
+			}
+			
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
 	}
-
+	
 	/**
-	 * getPageHref
+	 * getTemplate
 	 *
-	 * Returns the href of the current page
-	 *
-	 * @return string Href of page
+	 * @return string template html
 	 */
-	public function getPageHref()
+	public function getTemplate($template = false)
 	{
-		return strtolower(str_replace("/","",$_SERVER['REQUEST_URI']));
+		if($template) $this->setTemplate($template);
+		try
+		{
+			if(isset($this->_template))
+			{
+				return $this->_template;
+			}
+			else
+			{
+				throw new brdi_Exception("Tried to get template before setting template");
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
+	}
+	
+	/**
+	 * setContent
+	 *
+	 * Set the content array
+	 *
+	 * @param array $content
+	 * @return bool
+	 */
+	public function setContent($content)
+	{
+		try
+		{
+			if(is_array($content))
+			{
+				$this->_content = $content;
+				return true;
+			}
+			else
+			{
+				throw new brdi_Exception("Content set as type other than array");
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
+	}
+	
+	/**
+	 * getContent
+	 *
+	 * @return array|bool Content array
+	 */
+	public function getContent()
+	{
+		try
+		{
+			if(isset($this->_content))
+			{
+				return $this->_content;
+			}
+			else
+			{
+				throw new brdi_Exception("Tried to get content before setting content");
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
+	}
+	
+	/**
+	 * setParams
+	 *
+	 * Set the params array
+	 *
+	 * @param array $params
+	 * @return bool
+	 */
+	public function setParams($params = array())
+	{
+		$this->_params = $params;
+		return true;
+	}
+	
+	/**
+	 * getParams
+	 *
+	 * @return array|bool Params array
+	 */
+	public function getParams()
+	{
+		try
+		{
+			if(isset($this->_params))
+			{
+				return $this->_params;
+			}
+			else
+			{
+				throw new brdi_Exception("Tried to get params before setting params");
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
 	}
 
 	/**
@@ -539,24 +677,23 @@ class brdi_Portal extends brdi
 		if($this->getPageRoot() == $this->getPageRoot($config_page)) return true;
 		else return false;
 	}
-
-	/**
-	 * getPageParent
-	 *
-	 * Returns the scope of the parent page
-	 *
-	 * @return string Parent page
-	 */
-	public function getPageParent($page)
-	{
-		if($page[0] == "/")
+	
+	function ci_file_exists($filename) {
+		if (file_exists($filename))
 		{
-			$page = substr($page, 1);
+			return $filename;
 		}
-		$page = explode("/", $page);
-		$parent = $page[0];
-		if(!$parent) $parent = "homepage";
-		return $parent;
+		$dir = dirname($filename);
+		$files = glob($dir . '/*');
+		$lcaseFilename = strtolower($filename);
+		foreach($files as $file)
+		{
+			if (strtolower($file) == $lcaseFilename)
+			{
+			  return $file;
+			}
+		}
+		return false;
 	}
 }
 ?>

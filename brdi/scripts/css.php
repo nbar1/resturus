@@ -1,5 +1,4 @@
 <?php
-ob_start("ob_gzhandler");
 header("content-type: text/css; charset: UTF-8");
 header("Cache-Control: max-age=1800");
 
@@ -11,7 +10,8 @@ if(!is_array($css)) $css = array();
 // include globals
 if(!isset($_GET['exclude_global'])) array_unshift($css, "config/default/assets/stylesheets/global/global.css");
 if(!isset($_GET['exclude_bootstrap'])) array_unshift($css, "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css");
-if(!isset($_GET['exclude_font'])) array_unshift($css, "http://fonts.googleapis.com/css?family=Prata");
+if(!isset($_GET['exclude_font_prata'])) array_unshift($css, "http://fonts.googleapis.com/css?family=Prata");
+if(!isset($_GET['exclude_font_roboto'])) array_unshift($css, "http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300");
 
 foreach($css as $css_file)
 {

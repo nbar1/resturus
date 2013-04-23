@@ -1,59 +1,60 @@
-.component_Twitter .tweet_user {
+.component_brdi_Portal_component_brdi_Portal_Component_Twitter .tweet_user {
 	width: 100%;
 }
-.component_Twitter .tweet_user div {
+.component_brdi_Portal_Component_Twitter .tweet_user div {
 	float: left;
 }
-.component_Twitter .twitter_logo {
+.component_brdi_Portal_Component_Twitter .twitter_logo {
 	background: url(/config/default/assets/images/components/twitter/twitter_logo.png) no-repeat;
 	float: right;
 	height: 28px;
 	width: 40px;
 }
-.component_Twitter .tweet_user_image img {
+.component_brdi_Portal_Component_Twitter .tweet_user_image img {
 	box-shadow: 1px 1px 1px rgba(50, 50, 50, 0.3);
 	height: 60px;
 	width: 60px;
 }
-.component_Twitter .tweet_user_name {
+.component_brdi_Portal_Component_Twitter .tweet_user_name {
 	margin-left: 10px;
 	width: 200px;
 }
-.component_Twitter .tweet_user_display_name {
+.component_brdi_Portal_Component_Twitter .tweet_user_display_name {
 	font-size: 20px;
 	line-height: 34px;
+	width: 100%;
 }
-.component_Twitter .tweet_user_screen_name {
+.component_brdi_Portal_Component_Twitter .tweet_user_screen_name {
 	font-size: 16px;
 }
-.component_Twitter .tweet_text {
+.component_brdi_Portal_Component_Twitter .tweet_text {
 	border-top: 1px solid #ddd;
 	line-height: 28px;
 	margin: 0 5px;
 	padding: 15px 5px;
 }
-.component_Twitter .tweet_created {
+.component_brdi_Portal_Component_Twitter .tweet_created {
 	color: #999;
 	float: right;
 	font-size: 10px;
 	margin: -17px 7px 0 0;
 }
-.component_Twitter .highlight_tweet .tweet_text {
+.component_brdi_Portal_Component_Twitter .highlight_tweet .tweet_text {
 	border: 0;
 	font-size: 20px;
 	padding-top: 5px;
 }
-.component_Twitter .tweets_all {
+.component_brdi_Portal_Component_Twitter .tweets_all {
 	clear: both;
 	float: left;
 	margin-top: 10px;
 	width: 100%;
 }
 @media (min-width: 767px) {
-	.component_Twitter.scroll {
+	.component_brdi_Portal_Component_Twitter.scroll {
 		max-height: 500px;
 	}
-	.component_Twitter.scroll .tweets_all {
+	.component_brdi_Portal_Component_Twitter.scroll .tweets_all {
 		max-height: 410px;
 		overflow: scroll;
 	}

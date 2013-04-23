@@ -7,15 +7,19 @@
  */
 class brdi_Portal_Component_Analytics_Google extends brdi_Portal_Component
 {
-	private $_brdi_Portal_Component_Analytics_Google = array(
+	protected $_params = array(
 		'analytics' => array(
 			'google' => array(
 				'accountid' => 'UA-39473337-1',
 				'domain' => 'resturus.com',
 			),
 		),
+		'assets' => array(
+			'template' => 'template://components/analytics/google/view/',
+		),
 		'columns' => 0,
 		'offset' => 0,
+		'wrapper' => false,
 	);
 
 	/**
@@ -26,15 +30,13 @@ class brdi_Portal_Component_Analytics_Google extends brdi_Portal_Component
 	 * @param Array $config Component configuration
 	 * @return Array Assets and template for component
 	 */
-	public function build($params)
+	public function actionDefault()
 	{
-		$config = array_merge($this->_brdi_Portal_Component_Analytics_Google, $params['config'], array('type' => $params['type']));
-		$template = $this->getComponentTemplate($config);
+		$params = $this->getParams();
 		
-		$content = $config;
-		//$template = $this->buildComponentWrapper($template, $config);
+		$this->setContent($this->getParams());
 
-		return array(array($this->javascripts, $this->stylesheets), $template, $content, $config);
+		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}
 }
 ?>

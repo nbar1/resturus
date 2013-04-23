@@ -126,5 +126,41 @@ class brdi
 	{
 		return $_SERVER['REQUEST_URI'];
 	}
+
+	/**
+	 * isUri
+	 *
+	 * @params string Uri
+	 * @return bool
+	 */
+	public function isUri($uri)
+	{
+		if(preg_match("|^.+?://.+?/?$|", $uri))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * parseUri
+	 *
+	 *
+	 *
+	 */
+	public function parseUri($uri)
+	{
+		if(preg_match("|^(.+?)://(.+?)/?$|", $uri, $uri_parsed))
+		{
+			return array('type' => $uri_parsed[1], 'path' => $uri_parsed[2]);
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

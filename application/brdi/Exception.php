@@ -2,6 +2,7 @@
 class brdi_Exception extends Exception
 {
 	protected $_error_codes = array(
+		0 => "Undefined Error",
 		/* Database */
 		100 => "General Database Error",
 		101 => "Insert Database Error",
@@ -19,25 +20,27 @@ class brdi_Exception extends Exception
 		/* Component */
 		400 => "Error Loading Component",
 		401 => "Error Loading Component Config",
+		/* Page */
+		400 => "Error Loading Page",
+		401 => "Error Loading Page Config",
 		
 		/* Custom Components */
 		/* Twitter */
 		20100 => "Error: brdi_Portal_Component_Twitter"
 	);
 	
-	public function __construct($err_code, $err_info="", $scope="outside", $insert_into_db=true)
+	public function logError()
 	{
-		parent::__construct($err_info, $err_code);
 		$error = array(
-			'err_code' => $err_code,
-			'err_type' => $this->_error_codes[$err_code],
-			'err_info' => $err_info,
-			'err_scope' => print_r($scope, true)."\n\n".print_r($_SERVER,true),
+			'err_code' => $this->getCode(),
+			'err_type' => $this->_error_codes[$this->getCode()],
+			'err_info' => $this->getMessage(),
+			'err_scope' => print_r($this->getTrace(), true)."\n\n".print_r($_SERVER,true),
 			'err_time' => date("Y-m-d H:i:s"),
 		);
 		
-		if($insert_into_db === true) $this->storeInDatabase($error);
-		//if(STATUS == "development" || $_GET['__e']) $this->outputError($error);
+		$this->storeInDatabase($error);
+		$this->outputError();
 	}
 	
 	private function storeInDatabase($error)
@@ -49,9 +52,9 @@ class brdi_Exception extends Exception
 		return true;
 	}
 	
-	private function outputError($error)
+	private function outputError()
 	{
-		var_dump($error);
+		echo 'Error on line '.$this->getLine().' in '.$this->getFile() .': <b>'.$this->getMessage().'</b>';
 	}
 }
 ?>
