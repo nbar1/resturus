@@ -12,7 +12,7 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 			'oauth_access_token_secret' => 'viqukhvBEz4dJiSLpZSoxsnWAtqdkKCXW7oa4ilYoU',
 		),
 		'user' => 'resturus',
-		'limit' => 10,
+		'limit' => 5,
 		'show_twitter_logo' => true,
 		'exclude_replies' => true,
 		'scroll_tweets' => true,
@@ -29,7 +29,6 @@ class brdi_Portal_Component_Twitter extends brdi_Portal_Component
 	public function actionDefault()
 	{
 		$params = $this->getParams();
-
 		if($params['scroll_tweets'] === true)
 		{
 			$params['class'] .= " scroll";

@@ -87,7 +87,7 @@ class brdi_Portal_Page extends brdi_Portal
 		$page = $page[0];
 		// if blank, set as homepage
 		if(!$page || $page == "/") $page = "home";
-		
+
 		$page = explode("/", $page);
 		foreach($page as $k=>$v) $page[$k] = ucfirst($v);
 		$page = implode("/", $page);

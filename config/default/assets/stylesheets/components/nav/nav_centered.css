@@ -4,12 +4,15 @@
 #mainnav .navbar-inner ul.nav {
 	height: 40px;
 }
+#mainnav .navbar-inner ul.nav li:last-child {
+	margin-left: -5px;
+}
 #mainnav .navbar-inner ul.nav li {
 	display: inline-block;
 	float: none;
 }
 #mainnav .navbar-inner ul.nav li>a{
-	padding: 10px 25px 10px 25px;
+	padding: 10px 30px 10px 25px;
 }
 #mainnav .navbar-inner ul.nav li.active {
 	margin-left: -5px;

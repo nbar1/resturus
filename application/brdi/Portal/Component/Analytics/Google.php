@@ -19,7 +19,7 @@ class brdi_Portal_Component_Analytics_Google extends brdi_Portal_Component
 		),
 		'columns' => 0,
 		'offset' => 0,
-		'wrapper' => false,
+		'wrapper' => "template://wrappers/component_none/",
 	);
 
 	/**

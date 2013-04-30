@@ -20,6 +20,7 @@ class brdi_Portal extends brdi
 	 */
 	public function getConfigOverride($path)
 	{
+		if(strpos($path, "http") === 0) return $path;
 		if(strstr($path, "cmsimages/") !== false) return $path;
 		try
 		{
@@ -114,7 +115,7 @@ class brdi_Portal extends brdi
 							}
 							catch (brdi_Exception $e)
 							{
-								Throw new brdi_Exception(401, null, $this);
+								throw new brdi_Exception(401, null, $this);
 							}
 						}
 						else
@@ -129,14 +130,15 @@ class brdi_Portal extends brdi
 				break;
 
 				case "if";
-					if($this->getContentValue($params[0], $content) === true)
+					$if_param = implode("/", $this->remove_array_empty_values($params, 0));
+					if($this->getContentValue($params, $content) === true)
 					{
 						$this->replaceToken($template, $raw_token, "");
-						$this->replaceToken($template, "!{endif://{$params[0]}/}", "");
+						$this->replaceToken($template, "!{endif://{$if_param}/}", "");
 					}
 					else {
-						$delif = explode("!{if://{$params[0]}/}", $template, 1);
-						$delendif = explode("!{endif://{$params[0]}/}", $template, 1);
+						$delif = explode("!{if://".$if_param."/}", $template);
+						$delendif = explode("!{endif://".$if_param."/}", $template);
 						$template = $delif[0].$delendif[1];
 					}
 				break;
@@ -153,14 +155,23 @@ class brdi_Portal extends brdi
 						if($params[0] == "images") sort($content[$params[0]]);
 						for($i=0; $i<$count; $i++)
 						{
-							$loop_template .= $this->renderTokens(str_replace("[*]", $i, $loop_content), $content, $config);
+							$new_loop_content = str_replace("[*]", $i, trim($loop_content));
+							$loop_template .= $this->renderTokens($new_loop_content, $content, $config);
 						}
+						$template = preg_replace("|!{loop://".$loop."/?}(.+?)!{endloop://".$loop."/?}|s", $loop_template, $template, 1);
 					}
-					$template = preg_replace("|!{loop://".$loop."/?}(.+?)!{endloop://".$loop."/?}|s", $loop_template, $template, 1);
 				break;
 				
 				case "loopvar":
-					$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
+					
+					if(preg_match("|/(\d+)/x/}|", $raw_token, $key))
+					{
+						$template = $this->replaceToken($template, $raw_token, $key[1]);
+					}
+					else
+					{
+						$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
+					}
 				break;
 
 				case "image":
@@ -177,7 +188,8 @@ class brdi_Portal extends brdi
 				break;
 
 				case "token":
-					$template = $this->replaceToken($template, $raw_token, $this->getContentValue($params, $content));
+					$replacement = $this->getContentValue($params, $content);
+					$template = $this->replaceToken($template, $raw_token, $replacement);
 				break;
 			}
 		}
@@ -338,16 +350,15 @@ class brdi_Portal extends brdi
 					$array .= "['".$type[$i]."']";
 				}
 			}
-			// the fuck??
 			try
 			{
 				$array = str_replace("['']", "", $array);
-				eval("\$thecontent = (isset(".$array."))?".$array.":'';");
+				eval("\$thecontent = (isset(".$array."))?".$array.":false;");
 				
 			}
 			catch (brdi_Exception $e)
 			{
-				$thecontent = "";
+				$thecontent = false;
 			}
 			return $thecontent;
 		}
@@ -454,7 +465,15 @@ class brdi_Portal extends brdi
 		foreach($javascripts as $js)
 		{
 			// parse javascript as html
-			$html .= "<script type=\"text/javascript\" src=\"/".$js."\"></script>";
+			if(substr($js, 0, 4) == 'http')
+			{
+				// add remote file
+				$html .= "<script type=\"text/javascript\" src=\"".$js."\"></script>";
+			}
+			else
+			{
+				$html .= "<script type=\"text/javascript\" src=\"/".$js."\"></script>";
+			}
 		}
 		return $html;
 	}
@@ -490,7 +509,7 @@ class brdi_Portal extends brdi
 	 * @param string template uri
 	 * @return bool
 	 */
-	public function setTemplate($template)
+	public function setTemplate($template, $set = true)
 	{
 		try
 		{
@@ -501,6 +520,7 @@ class brdi_Portal extends brdi
 				$template_path = strtolower($uri['type']."s/".$uri['path'].".php");
 				$template = $this->getConfigOverride("assets/".$template_path);
 				$template = @file_get_contents($template);
+				
 				if($template === false)
 				{
 					throw new brdi_Exception("Template uri pointed to invalid template");
@@ -509,7 +529,8 @@ class brdi_Portal extends brdi
 			
 			if($template)
 			{
-				$this->_template = $template;
+				if($set) $this->_template = $template;
+				else return $template;
 				return true;
 			}
 			else
@@ -530,12 +551,26 @@ class brdi_Portal extends brdi
 	 *
 	 * @return string template html
 	 */
-	public function getTemplate($template = false)
+	public function getTemplate($template = false, $set = true)
 	{
-		if($template) $this->setTemplate($template);
+		if($template)
+		{
+			if($set)
+			{
+				$this->setTemplate($template);
+			}
+			else
+			{
+				$template_noset = $this->setTemplate($template, false);
+			}
+		}
 		try
 		{
-			if(isset($this->_template))
+			if(!$set)
+			{
+				return $template_noset;
+			}
+			elseif(isset($this->_template))
 			{
 				return $this->_template;
 			}
@@ -559,12 +594,13 @@ class brdi_Portal extends brdi
 	 * @param array $content
 	 * @return bool
 	 */
-	public function setContent($content)
+	public function setContent($content, $merge = true)
 	{
 		try
 		{
 			if(is_array($content))
 			{
+				if(is_array($this->_content) && $merge) $content = array_merge($this->_content, $content);
 				$this->_content = $content;
 				return true;
 			}
@@ -677,7 +713,8 @@ class brdi_Portal extends brdi
 		if($this->getPageRoot() == $this->getPageRoot($config_page)) return true;
 		else return false;
 	}
-	
+
+	// case insensitive file_exists
 	function ci_file_exists($filename) {
 		if (file_exists($filename))
 		{

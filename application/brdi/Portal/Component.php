@@ -18,20 +18,29 @@ class brdi_Portal_Component extends brdi_Portal
 		'component_title' => "COMPONENT",
 		'offset' => 0,
 		'show_component_title' => false,
-		'wrapper' => true,
+		'wrapper' => "template://wrappers/component/",
 	);
 
 	public function __construct($params = array())
 	{
 		$params = $this->mergeParams($params);
+		$wrapper = $params['wrapper'];
+		$params['wrapper'] = array();
+		$params['wrapper']['uri'] = $wrapper;
+		$params['wrapper']['prop'] = $this->buildComponentWrapper($params);
 		$this->setParams($params);
+		$this->setContent(array('wrapper'=>$params['wrapper']));
 		$this->setAllComponentJavascripts($params);
 		$this->setAllComponentStylesheets($params);
-		$this->setTemplate($params['assets']['template']);
-		if($params['wrapper'] === true)
-		{
-			$this->setTemplate($this->buildComponentWrapper($this->getTemplate(), $this->getParams()));
-		}
+
+		$template = $params['assets']['template'];
+		
+
+		$wrapper = (isset($params['wrapper']['uri']))?$this->getTemplate($params['wrapper']['uri'],false):$this->getTemplate("template://wrappers/bare/",false);
+		$this->setTemplate($template);
+		$wrapper = $this->replaceToken($wrapper, "!{template://component/}", $this->getTemplate());
+		
+		$this->setTemplate($wrapper);
 	}
 	
 	private function mergeParams($params)
@@ -82,7 +91,7 @@ class brdi_Portal_Component extends brdi_Portal
 		}
 		else
 		{
-			$assets['template'] = $this->_globalparams['assets']['template'];
+			$assets['template'] = $this->_global_params['assets']['template'];
 		}
 		$params = array_merge($this->_global_params, $this->_params, $params);
 		$params['assets'] = $assets;
@@ -193,16 +202,15 @@ class brdi_Portal_Component extends brdi_Portal
 	 *
 	 * Wraps the component, defining a column or offset width
 	 *
-	 * @param String $template Component template
 	 * @param Array $config Component configuration
 	 * @return String Component wrapped
 	 */
-	public function buildComponentWrapper($template, $config)
+	public function buildComponentWrapper($config)
 	{
 		global $columns_max;
 		global $columns_at;
 		$wrapper_class = "";
-		$wrapper = "";
+		$wrapper_prop = array();
 
 		// reset column position if needed
 		if($columns_at > 12) $columns_at = 1;
@@ -212,40 +220,33 @@ class brdi_Portal_Component extends brdi_Portal
 		$offset = (isset($config['offset']))?$config['offset']:0;
 
 		// keep columns and offset within range
-		if($columns < 1) $columns = 1;
+		// columns
+		if($columns < 1) $columns = 0;
 		if($columns > $columns_max) $columns = $columns_max;
-		$wrapper_class .= " span".$columns;
+		$wrapper_prop['columns'] = $columns;
+		// offset
 		if($offset < 0 || $offset > ($columns_max-1)) $offset = 0;
-		if($offset > 0) $wrapper_class .= " offset".$offset;
+		$wrapper_prop['offset'] = ($offset > 0)?$offset:0;
 
-		$wrapper_class = trim($wrapper_class);
+		if(($columns_at + $columns + $offset - 1) > $columns_max) $wrapper_prop['row']['endfirst'] = true;
+		$wrapper_prop['row']['start'] = ($columns_at == 1)?true:false;
 
-		//$wrapper .= "<!--CHECK end row because not enough space: {$columns_at} + {$columns} + {$offset} -1 = " . ($columns_at + $columns + $offset - 1) ." gt ". $columns_max." -->";
+		$wrapper_prop['component']['class'] = (isset($config['class']))?$config['class']." ":"";
+		$wrapper_prop['component']['class'] .= " span".$columns;
+		if($offset > 0) $wrapper_prop['component']['class'] .= " offset".$offset;
+		$wrapper_prop['component']['class'] = trim($wrapper_prop['component']['class'] . " component_".get_class($this)." ".$wrapper_class);
 
-		if(($columns_at + $columns + $offset - 1) > $columns_max)
-		{
-			$wrapper .= "</div>";
-			$columns_at = 1;
-		}
-		if($columns_at == 1) $wrapper .= "<div class=\"row-fluid\">";
-		if(!isset($config['class'])) $config['class'] = "";
-		$wrapper .= "<div class=\"component ".trim($wrapper_class." component_".get_class($this)." ".$config['class'])."\">";
-		if($config['show_component_title'] === true)
-		{
-			$wrapper .= "<div class=\"comp_header\">{$config['component_title']}</div>";
-		}
-		$wrapper .= "<div class=\"comp_body\">{$template}</div>";
-		$wrapper .= "</div>";
+		$wrapper_prop['component']['showtitle'] = ($config['show_component_title'])?true:false;
+		$wrapper_prop['component']['title'] = (isset($config['component_title']))?$config['component_title']:"COMPONENT";
 
+		$wrapper_prop['row']['end'] = false;
 		$columns_at += $columns + $offset;
-
 		if($columns_at >= $columns_max)
 		{
-			$wrapper .= "</div>";
+			$wrapper_prop['row']['end'] = true;
 			$columns_at = 1;
 		}
-
-		return $wrapper;
+		return $wrapper_prop;
 	}
 	
 	/**

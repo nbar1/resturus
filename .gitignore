@@ -1,6 +1,4 @@
 *.swp
 *.bak
-.htaccess
 error_log
-db.php
 *.ico

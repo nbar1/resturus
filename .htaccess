@@ -4,6 +4,8 @@ Options +FollowSymLinks
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule ^cms/(.*)$  cms/index.php/$1 [PT,L]
+RewriteRule .*\.git.* - [L,R=404]
+RewriteRule ^(application)/.* - [L,R=404]
 RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png [L,NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

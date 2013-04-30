@@ -1,0 +1,33 @@
+#map_container {
+	position: relative;
+}
+#map-canvas {
+	height: 400px;
+	width: 100%;
+}
+#map_location_overlay {
+	background: #eee;
+	border: 1px solid #ccc;
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 300;
+	height: 300px;
+	padding: 20px;
+	position: absolute;
+	right: 30px;
+	top: 28px;
+	width: 400px;
+}
+#map_location_overlay h1 {
+	margin-top: 0;
+}
+#map_location_overlay h3 {
+	font-weight: 300;
+	margin: 0;
+}
+#map_location_overlay h3.contact_title {
+	color: #777;
+}
+#map_location_overlay h3.contact_title.ct_phone {
+	margin-top: 25px;
+}

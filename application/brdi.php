@@ -162,5 +162,28 @@ class brdi
 			return false;
 		}
 	}
+	
+	public function remove_array_empty_values($array, $remove_null_number = true)
+	{
+	$new_array = array();
+
+	$null_exceptions = array();
+
+	foreach ($array as $key => $value)
+	{
+		$value = trim($value);
+
+        if($remove_null_number)
+		{
+	        $null_exceptions[] = '0';
+		}
+
+        if(!in_array($value, $null_exceptions) && $value != "")
+		{
+            $new_array[] = $value;
+        }
+    }
+    return $new_array;
+}
 }
 ?>

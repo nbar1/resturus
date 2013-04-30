@@ -1,0 +1,1 @@
+<img src="/config/westcoastrenovations/assets/images/components/rawhtml/energystarlogohp/energystar_logo_hp.png" />

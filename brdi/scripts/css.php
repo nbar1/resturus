@@ -9,7 +9,7 @@ if(!is_array($css)) $css = array();
 
 // include globals
 if(!isset($_GET['exclude_global'])) array_unshift($css, "config/default/assets/stylesheets/global/global.css");
-if(!isset($_GET['exclude_bootstrap'])) array_unshift($css, "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css");
+if(!isset($_GET['exclude_bootstrap'])) array_unshift($css, "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css");
 if(!isset($_GET['exclude_font_prata'])) array_unshift($css, "http://fonts.googleapis.com/css?family=Prata");
 if(!isset($_GET['exclude_font_roboto'])) array_unshift($css, "http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300");
 

@@ -38,7 +38,7 @@ a:hover {
 .header_text {
 	font-family: 'Roboto Condensed', sans-serif;
 	font-size: 26px;
-	font-weight: 300;
+	font-weight: 300 !;
 	line-height: 30px;
 	margin: 10px 0 30px;
 	text-align: center;
@@ -81,13 +81,14 @@ a:hover {
 	-webkit-box-shadow: 0px 1px 5px 0px #4a4a4a;
 	box-shadow: 0px 1px 5px 0px #4a4a4a;
 	margin-top: 20px;
-}#content .component .component {
+}
+.component .component {
 	margin-top: 0;
 }
-#content .component .comp_body {
+#content .comp_body {
 	padding: 10px;
 }
-#content .component .comp_header {
+#content .comp_header {
 	background: #dedede;
 	-moz-box-shadow:  0 2px 6px rgba(74,74,74,0.25);
 	-webkit-box-shadow:  0 2px 6px rgba(74,74,74,0.25);

@@ -3,3 +3,4 @@
 !{component://Location/}
 !{component://Location/}
 !{component://Twitter/}
+!{component://PhotoGallery/Carousel/}

@@ -53,7 +53,6 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 			}
 			$x++;
 		}
-
 		$this->setContent($content);
 		return array($this->getTemplate(), $this->getContent(), $this->getParams());
 	}

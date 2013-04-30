@@ -1,0 +1,9 @@
+.carousel {
+	margin-bottom: 0;
+}
+.carousel-control {
+	top: 47%;
+}
+#content .component_brdi_Portal_Component_PhotoGallery_Carousel > .comp_body {
+	padding: 0;
+}
