@@ -131,15 +131,25 @@ class brdi_Portal extends brdi
 
 				case "if";
 					$if_param = implode("/", $this->remove_array_empty_values($params, 0));
-					if($this->getContentValue($params, $content) === true)
+					$content_value = $this->getContentValue($params, $content);
+					if($content_value !== false && $content_value !== null)
 					{
 						$this->replaceToken($template, $raw_token, "");
 						$this->replaceToken($template, "!{endif://{$if_param}/}", "");
 					}
-					else {
+					else
+					{
 						$delif = explode("!{if://".$if_param."/}", $template);
 						$delendif = explode("!{endif://".$if_param."/}", $template);
-						$template = $delif[0].$delendif[1];
+						if(sizeof($delif) < 2 || sizeof($delendif) < 2)
+						{
+							$this->replaceToken($template, $raw_token, "");
+							$this->replaceToken($template, "!{endif://{$if_param}/}", "");
+						}
+						else
+						{
+							$template = $delif[0].$delendif[1];
+						}
 					}
 				break;
 				

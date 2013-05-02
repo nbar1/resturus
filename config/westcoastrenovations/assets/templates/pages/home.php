@@ -1,3 +1,4 @@
 !{component://ImageSlider/Homepage/}
-!{component://Twitter/}
-!{component://RawHtml/EnergyStarLogoHP/}
+!{component://Image/Homepage/EnergyStar/}
+!{component://Image/Homepage/Fhba/}
+!{component://Image/Homepage/BuildingIndustryAssociation/}

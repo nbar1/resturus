@@ -8,6 +8,9 @@ body {
 	font-weight: 300;
 	height: 100%;
 }
+img {
+	border: 0;
+}
 a:hover {
 	text-decoration: none;
 }
@@ -80,6 +83,9 @@ a:hover {
 	-moz-box-shadow: 0px 1px 5px 0px #4a4a4a;
 	-webkit-box-shadow: 0px 1px 5px 0px #4a4a4a;
 	box-shadow: 0px 1px 5px 0px #4a4a4a;
+	margin-top: 20px;
+}
+#content .component_bare {
 	margin-top: 20px;
 }
 .component .component {
