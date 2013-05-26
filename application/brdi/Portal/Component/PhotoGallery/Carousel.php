@@ -10,6 +10,9 @@ class brdi_Portal_Component_PhotoGallery_Carousel extends brdi_Portal_Component
 	public $_params = array(
 		'images' => array(),
 		'image_category' => false,
+		'show_arrows' => true,
+		'show_indicators' => true,
+		'transition' => 'fade', // fade[broken], slide
 		'assets' => array(
 			'stylesheets' => array(
 				'assets/stylesheets/components/photogallery/carousel/carousel.css',
@@ -31,12 +34,12 @@ class brdi_Portal_Component_PhotoGallery_Carousel extends brdi_Portal_Component
 	public function actionDefault()
 	{
 		$params = $this->getParams();
-		
+
 		if($params['image_category'] !== false)
 		{
 			$params['images'] = $this->getImagesFromCategory($params['image_category']);
 		}
-		
+
 		$x=0;
 		foreach($params['images'] as $image)
 		{
@@ -47,7 +50,11 @@ class brdi_Portal_Component_PhotoGallery_Carousel extends brdi_Portal_Component
 			if(isset($image['description'])) $content['images'][$x]['description'] = $image['description'];
 			$x++;
 		}
-		
+		$content['images'][0]['active'] = true;
+		$content['show_arrows'] = $params['show_arrows'];
+		$content['show_indicators'] = $params['show_indicators'];
+		$content['transition'] = $params['transition'];
+
 		if(isset($content) && is_array($content)) $this->setContent($content);
 
 		return array($this->getTemplate(), $this->getContent(), $this->getParams());

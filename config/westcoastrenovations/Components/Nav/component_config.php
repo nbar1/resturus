@@ -2,8 +2,8 @@
 return new brdi_Portal_Component_Nav(array(
 	'show_title' => false,
 	'nav' => array(
-		'Aboutus',
-		'Customrenovations',
+		'AboutUs',
+		'CustomRenovations',
 		'Services',
 		'Contact',
 	),

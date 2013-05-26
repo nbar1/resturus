@@ -43,7 +43,7 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
-	
+
 	/**
 	 * getTokens
 	 *
@@ -59,7 +59,7 @@ class brdi_Portal extends brdi
 		}
 		return $matches;
 	}
-	
+
 	/**
 	 * renderTokens
 	 *
@@ -77,6 +77,9 @@ class brdi_Portal extends brdi
 		{
 			$raw_token = $tokens[0][$k];
 			$params = $tokens[2][$k];
+
+			// check if token still exists
+			if(strstr($template, $raw_token) === false) continue;
 
 			// check for variable in token and continue if present
 			if(strstr($raw_token, "[*]") !== false) continue;
@@ -104,9 +107,9 @@ class brdi_Portal extends brdi
 							{
 								// get component
 								$component_obj = $this->parseComponent($config);
-								
+
 								$component_return = $component_obj->buildComponent();
-								
+
 								//set component variables
 								$component_html = $this->renderTokens($component_return[0], $component_return[1], $component_return[2]);
 								//parse token against given content
@@ -152,7 +155,7 @@ class brdi_Portal extends brdi
 						}
 					}
 				break;
-				
+
 				case "loop":
 					$loop = implode("/", array_filter($params));
 					$loopdata = $this->getContentValue($params[0], $content);
@@ -171,9 +174,9 @@ class brdi_Portal extends brdi
 						$template = preg_replace("|!{loop://".$loop."/?}(.+?)!{endloop://".$loop."/?}|s", $loop_template, $template, 1);
 					}
 				break;
-				
+
 				case "loopvar":
-					
+
 					if(preg_match("|/(\d+)/x/}|", $raw_token, $key))
 					{
 						$template = $this->replaceToken($template, $raw_token, $key[1]);
@@ -187,7 +190,7 @@ class brdi_Portal extends brdi
 				case "image":
 					$params = array_filter($params);
 					$image_class = array_pop($params);
-					if(strstr($image_class, ".")) 
+					if(strstr($image_class, "."))
 					{
 						array_push($params, $image_class);
 						$image_class = "";
@@ -205,7 +208,7 @@ class brdi_Portal extends brdi
 		}
 		return $template;
 	}
-	
+
 	/**
 	 * loadCmsComponent
 	 *
@@ -218,12 +221,12 @@ class brdi_Portal extends brdi
 		// build component class
 		$cms_component = array_filter(explode("/", $this->getPagePath(false)));
 		foreach($cms_component as $k=>$v) $cms_component[$k] = ucfirst($v);
-		
+
 		$cms_component = implode("_", $cms_component);
-		
+
 		$comp_class = 'brdi_Portal_Component_'.$cms_component;
 		$full_class = $comp_class;
-		
+
 		while(!class_exists($comp_class))
 		{
 			$comp_class = explode("_", $comp_class);
@@ -246,28 +249,6 @@ class brdi_Portal extends brdi
 		$template = $this->replaceToken($params['template'], $params['rawtoken'], $component_html, false);
 		return $template;
 
-	}
-	
-	private function parseComponent($config)
-	{
-		try
-		{
-			$component_config = @file_get_contents($config);
-			if($component_config)
-			{
-				$component_config = trim(str_replace(array("<?php","<?","?>"), "", $component_config));
-				return eval($component_config);
-			}
-			else
-			{
-				throw new brdi_Exception("Error loading component", 400);
-			}
-		}
-		catch(brdi_Exception $e)
-		{
-			$e->logError();
-			return false;
-		}
 	}
 
 	/**
@@ -295,7 +276,6 @@ class brdi_Portal extends brdi
 					array_shift($params);
 					$asset = $this->getConfigOverride(implode("/", $params).".css");
 				}
-				
 			}
 			elseif($params[0] === "javascript")
 			{
@@ -334,7 +314,7 @@ class brdi_Portal extends brdi
 			return preg_replace("|".preg_quote($token)."|", $new, $template, 1);
 		}
 	}
-	
+
 	/**
 	 * getContentValue
 	 *
@@ -344,7 +324,7 @@ class brdi_Portal extends brdi
 	 * @param Array $content Content values
 	 * @return String
 	 */
-	private function getContentValue($type, $content)
+	public function getContentValue($type, $content)
 	{
 		if(is_array($type))
 		{
@@ -364,7 +344,7 @@ class brdi_Portal extends brdi
 			{
 				$array = str_replace("['']", "", $array);
 				eval("\$thecontent = (isset(".$array."))?".$array.":false;");
-				
+
 			}
 			catch (brdi_Exception $e)
 			{
@@ -376,7 +356,7 @@ class brdi_Portal extends brdi
 		{
 			return $content[$type];
 		}
-		
+
 	}
 
 	/**
@@ -390,20 +370,20 @@ class brdi_Portal extends brdi
 	public function tokenize($config)
 	{
 		$template = $config['wrapper'];
-		
+
 		//$template = $this->replaceToken($template, "!{token://page}", $config['pageid']);
 		$template = $this->replaceToken($template, "!{template://internal/}", $config['assets']['template']);
 		// migrate from replace below - always end in trailing slash
 		$template = $this->replaceToken($template, "!{template://internal}", $config['assets']['template']);
 		$template = $this->renderTokens($template, array('page' => strtolower($config['pageid'])), $config);
-		
-		
-		
+
+
+
 		$template = $this->renderAssets($template, array(), $config);
-		
+
 		// clean up any loose ends
 		//mail("xnickbarone@gmail.com", "",$template);
-		
+
 
 		return $template;
 	}
@@ -510,7 +490,7 @@ class brdi_Portal extends brdi
 		$html = "<link rel=\"stylesheet\" type=\"text/css\" href=\"/brdi/scripts/css.php?load=".urlencode(json_encode($css_files))."\" />";
 		return $html;
 	}
-	
+
 	/**
 	 * setTemplate
 	 *
@@ -530,13 +510,13 @@ class brdi_Portal extends brdi
 				$template_path = strtolower($uri['type']."s/".$uri['path'].".php");
 				$template = $this->getConfigOverride("assets/".$template_path);
 				$template = @file_get_contents($template);
-				
+
 				if($template === false)
 				{
 					throw new brdi_Exception("Template uri pointed to invalid template");
 				}
 			}
-			
+
 			if($template)
 			{
 				if($set) $this->_template = $template;
@@ -547,7 +527,7 @@ class brdi_Portal extends brdi
 			{
 				throw new brdi_Exception("Template returned as false");
 			}
-			
+
 		}
 		catch(brdi_Exception $e)
 		{
@@ -555,7 +535,7 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
-	
+
 	/**
 	 * getTemplate
 	 *
@@ -595,7 +575,7 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
-	
+
 	/**
 	 * setContent
 	 *
@@ -625,7 +605,7 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
-	
+
 	/**
 	 * getContent
 	 *
@@ -650,7 +630,7 @@ class brdi_Portal extends brdi
 			return false;
 		}
 	}
-	
+
 	/**
 	 * setParams
 	 *
@@ -664,7 +644,7 @@ class brdi_Portal extends brdi
 		$this->_params = $params;
 		return true;
 	}
-	
+
 	/**
 	 * getParams
 	 *

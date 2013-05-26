@@ -165,25 +165,47 @@ class brdi
 	
 	public function remove_array_empty_values($array, $remove_null_number = true)
 	{
-	$new_array = array();
-
-	$null_exceptions = array();
-
-	foreach ($array as $key => $value)
+		$new_array = array();
+	
+		$null_exceptions = array();
+	
+		foreach ($array as $key => $value)
+		{
+			$value = trim($value);
+	
+	        if($remove_null_number)
+			{
+		        $null_exceptions[] = '0';
+			}
+	
+	        if(!in_array($value, $null_exceptions) && $value != "")
+			{
+	            $new_array[] = $value;
+	        }
+	    }
+	    return $new_array;
+	}
+	
+	public function parseComponent($config)
 	{
-		$value = trim($value);
-
-        if($remove_null_number)
+		try
 		{
-	        $null_exceptions[] = '0';
+			$component_config = @file_get_contents($config);
+			if($component_config)
+			{
+				$component_config = trim(str_replace(array("<?php","<?","?>"), "", $component_config));
+				return eval($component_config);
+			}
+			else
+			{
+				throw new brdi_Exception("Error loading component", 400);
+			}
 		}
-
-        if(!in_array($value, $null_exceptions) && $value != "")
+		catch(brdi_Exception $e)
 		{
-            $new_array[] = $value;
-        }
-    }
-    return $new_array;
-}
+			$e->logError();
+			return false;
+		}
+	}
 }
 ?>

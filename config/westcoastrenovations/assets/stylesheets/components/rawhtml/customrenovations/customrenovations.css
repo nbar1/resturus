@@ -1,5 +1,5 @@
 .tab-content {
-	background: #fff;
+	background: rgba(246, 246, 246, 1);
 	border: 1px solid #ddd;
 	margin-top: -21px;
 	padding: 30px;
@@ -12,6 +12,12 @@
 	font-size: 16px;
 	font-weight: bold;
 	padding-bottom: 10px;
+}
+#customrenovation_tabbed > li > a {
+	background: rgba(246, 246, 246, 0.4);
+}
+#customrenovation_tabbed > li.active > a {
+	background: rgba(246, 246, 246, 1);
 }
 
 /* PHONE */

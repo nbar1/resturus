@@ -4,9 +4,16 @@ Options +FollowSymLinks
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule ^cms/(.*)$  cms/index.php/$1 [PT,L]
+
+# 404 git directory
 RewriteRule .*\.git.* - [L,R=404]
+# 404 application directory
 RewriteRule ^(application)/.* - [L,R=404]
-RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png [L,NC]
+
+# Custom favicon
+RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png 
+
+# Front controller access
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [PT,L]
@@ -15,9 +22,3 @@ RewriteRule ^(.*)$ index.php/$1 [PT,L]
 <IfModule !mod_rewrite.c>
 ErrorDocument 404 /index.php
 </IfModule>
-
-<filesMatch "\.(ico|gif|jpg|png|js)$">
-ExpiresActive On
-ExpiresDefault "access plus 5 minute"
-Header append Cache-Control "public"
-</filesMatch>

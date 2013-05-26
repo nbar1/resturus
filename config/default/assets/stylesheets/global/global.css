@@ -31,10 +31,10 @@ a:hover {
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	height: auto;
-	margin: 20px auto 0;
+	margin: 0 auto;
 	max-width: 940px;
 	overflow: visible;
-	padding: 0;
+	padding: 20px 0 0;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }

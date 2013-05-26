@@ -22,11 +22,8 @@ class brdi_Portal_Page extends brdi_Portal
 		{
 			try
 			{
-				// get page config file
-				$page = "Page/".$this->getPagePath()."/page_config.php";
-				$page = $this->getConfigOverride($page);
-				
-				if($page === null)
+				$page = $this->isValidPage($this->getPagePath());
+				if($page === false || $page === null)
 				{
 					header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
 					header("Status: 404 Not Found");
@@ -34,32 +31,24 @@ class brdi_Portal_Page extends brdi_Portal
 					$page = $this->getConfigOverride("Page/Error/404/page_config.php");
 				}
 
-				if($page && file_exists($page))
+				// include $page_config
+				require($page);
+				if(!isset($page_config['assets']['javascripts'])) $page_config['assets']['javascripts'] = array();
+				if(!isset($page_config['assets']['stylesheets'])) $page_config['assets']['stylesheets'] = array();
+				if(!isset($page_config['wrapper'])) $page_config['wrapper'] = "template://wrappers/default/";
+				$page_config['wrapper'] = $this->getTemplate($page_config['wrapper']);
+				if(!isset($page_config['assets']['template'])) 
 				{
-					// include $page_config
-					require($page);
-					if(!isset($page_config['assets']['javascripts'])) $page_config['assets']['javascripts'] = array();
-					if(!isset($page_config['assets']['stylesheets'])) $page_config['assets']['stylesheets'] = array();
-					if(!isset($page_config['wrapper'])) $page_config['wrapper'] = "template://wrappers/default/";
-					$page_config['wrapper'] = $this->getTemplate($page_config['wrapper']);
-					if(!isset($page_config['assets']['template'])) 
-					{
-						$page_config['assets']['template'] = $this->getTemplate("template://pages/home/");
-					}
-					else
-					{
-						$page_config['assets']['template'] = $this->getTemplate($page_config['assets']['template']);
-					}
-					$page_config['pageid'] = str_replace("/", "_", $this->getPagePath());
-					
-					$this->_page_config = $page_config;
-					return $this->_page_config;
+					$page_config['assets']['template'] = $this->getTemplate("template://pages/home/");
 				}
-				else {
-					// 404
-					
-					throw new brdi_Exception("Error loading page config", 401);
+				else
+				{
+					$page_config['assets']['template'] = $this->getTemplate($page_config['assets']['template']);
 				}
+				$page_config['pageid'] = str_replace("/", "_", $this->getPagePath());
+				
+				$this->_page_config = $page_config;
+				return $this->_page_config;
 			}
 			catch(brdi_Exception $e)
 			{
@@ -69,6 +58,37 @@ class brdi_Portal_Page extends brdi_Portal
 		}
 		else {
 			return $this->_page_config;
+		}
+	}
+	
+	private function isValidPage($page)
+	{
+		$pages_file = $this->getConfigOverride("Page/pages.php");
+		if($pages_file && file_exists($pages_file))
+		{
+			require($pages_file);
+			
+			$page = explode("/",$page);
+			$page = array_map('strtolower', $page);
+			$pageUri = $this->getContentValue($page, $pages);
+			
+			if(is_array($pageUri) && isset($pageUri['_']))
+			{
+				$pageUri = $pageUri['_'];
+			}
+			
+			if($pageUri === false) return false;
+			
+			$pageUri = $this->parseUri($pageUri);
+
+			$page = "Page/".$pageUri['path']."/page_config.php";
+			$page = $this->getConfigOverride($page);
+			return $page;
+			
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -86,7 +106,7 @@ class brdi_Portal_Page extends brdi_Portal
 		$page = explode("?",$page);
 		$page = $page[0];
 		// if blank, set as homepage
-		if(!$page || $page == "/") $page = "home";
+		if(!$page || $page == "/") $page = "_";
 
 		$page = explode("/", $page);
 		foreach($page as $k=>$v) $page[$k] = ucfirst($v);
