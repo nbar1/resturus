@@ -16,8 +16,7 @@
 	<![endif]-->
 </head>
 <body>
-!{component://Logo/}
-!{component://Nav/}
+!{component://Header/}
 <div class="clearfix"></div>
 <div id="content" class="container-fluid page_!{token://page}">
 	!{template://internal/}

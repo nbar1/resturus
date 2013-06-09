@@ -1,0 +1,7 @@
+#header {
+	margin: 0 auto;
+	width: 940px;
+}
+#header #header_right > div {
+	float: right;
+}

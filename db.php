@@ -1,8 +1,8 @@
 <?php
-$dbhost = 'nbar1.com';
-$dbuser = 'thegogre_resturu';
-$dbpass = 'N?$@C{fUV-ZX';
-$dbname = 'thegogre_resturus';
+$dbhost = 'localhost';
+$dbuser = 'resturus_db_all';
+$dbpass = 'VBLzD9fxYGLhNfGH';
+$dbname = 'resturus';
 try
 {
 	$db = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);

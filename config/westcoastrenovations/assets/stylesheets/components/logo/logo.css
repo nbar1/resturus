@@ -2,6 +2,10 @@
 	margin: 15px 0 15px -20px;
 	text-align: center;
 }
+.logo_subtext {
+	font-size: 18px;
+	margin: 10px 0;
+}
 /* PHONE */
 @media (max-width: 767px) {
 	#logo {

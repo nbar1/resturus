@@ -22,7 +22,7 @@ class brdi_Portal_Component_Nav extends brdi_Portal_Component
 			'stylesheets' => array(
 				'assets/stylesheets/components/nav/nav.css',
 			),
-			'template' => 'template://components/nav/view/',
+			'template' => 'template://components/nav/default/',
 		),
 	);
 

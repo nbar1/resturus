@@ -1,7 +1,13 @@
 <?php
 //ob_start ("ob_gzhandler");
-
-define('STATUS','development');
+if($_SERVER['SERVER_ADDR'] == "198.199.81.142")
+{
+	define('STATUS','production');
+}
+else
+{
+	define('STATUS','development');
+}
 define('INCLUDES','application/includes/');
 define('CONFIG','config/');
 require_once(INCLUDES."autoloader.class.php");
