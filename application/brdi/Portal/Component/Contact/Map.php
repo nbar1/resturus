@@ -2,7 +2,7 @@
 class brdi_Portal_Component_Contact_Map extends brdi_Portal_Component_Contact
 {
 	protected $_params = array(
-		'address' => "8019 Estero Blvd 33931",
+		'address' => "PO Box 2316 33932",
 		'show_location_over_map' => true,
 		'zoom' => 14,
 		'assets' => array(
