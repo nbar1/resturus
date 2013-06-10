@@ -24,7 +24,7 @@ class brdi_Portal_Component_RawHtml extends brdi_Portal_Component
 	{
 		$params = $this->getParams();
 
-		$content = $params['html'];
+		$content = $params;
 
 		$this->setContent($content);
 		return array($this->getTemplate(), $this->getContent(), $this->getParams());

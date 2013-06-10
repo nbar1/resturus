@@ -1,1 +1,1 @@
-!{component://RawHtml/CustomRenovations/}
+!{component://Tabbed/CustomRenovations/}

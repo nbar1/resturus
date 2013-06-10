@@ -4,7 +4,6 @@
 	margin-top: -21px;
 	padding: 30px;
 }
-
 .tab-content #hurricanepreparedness li {
 	padding: 10px 0;
 }
@@ -13,10 +12,10 @@
 	font-weight: bold;
 	padding-bottom: 10px;
 }
-#customrenovation_tabbed > li > a {
+.component_brdi_Portal_Component_Tabbed > div > ul > li > a {
 	background: rgba(246, 246, 246, 0.4);
 }
-#customrenovation_tabbed > li.active > a {
+.component_brdi_Portal_Component_Tabbed > div > ul > li.active > a {
 	background: rgba(246, 246, 246, 1);
 }
 

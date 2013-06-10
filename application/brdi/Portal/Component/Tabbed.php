@@ -12,10 +12,18 @@ class brdi_Portal_Component_Tabbed extends brdi_Portal_Component
 			array(
 				'title' => '',
 				'content' => '',
-				'active' => true,
+				'active' => false,
 			),
 		),
 		'position' => 'top', // top
+		'assets' => array(
+			'javascripts' => array(),
+			'stylesheets' => array(
+				'assets/stylesheets/components/tabbed/tabbed.css',
+			),
+			'template' => 'template://components/tabbed/default/',
+		),
+		'wrapper' => "template://wrappers/component_bare/",
 	);
 
 	/**

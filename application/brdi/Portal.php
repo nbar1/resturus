@@ -70,7 +70,7 @@ class brdi_Portal extends brdi
 	 * @param Array $config Config array, might be able to phase this out
 	 * @return String Finalized template
 	 */
-	public function renderTokens($template, $content = array(), $config = array())
+	public function renderTokens($template, $content = array(), $config = array(), $skip_if = false)
 	{
 		$tokens = $this->getTokens($template);
 		foreach($tokens[1] as $k=>$type)
@@ -78,12 +78,13 @@ class brdi_Portal extends brdi
 			$raw_token = $tokens[0][$k];
 			$params = $tokens[2][$k];
 
+			if($skip_if === true && ($type == "if" || $type == "endif")) continue;
+
 			// check if token still exists
 			if(strstr($template, $raw_token) === false) continue;
 
 			// check for variable in token and continue if present
 			if(strstr($raw_token, "[*]") !== false) continue;
-
 			switch($type)
 			{
 				case "component":
@@ -376,8 +377,10 @@ class brdi_Portal extends brdi
 		// migrate from replace below - always end in trailing slash
 		$template = $this->replaceToken($template, "!{template://internal}", $config['assets']['template']);
 		$template = $this->renderTokens($template, array('page' => strtolower($config['pageid'])), $config);
-
-
+		while(strstr($template, "component://") !== false)
+		{
+			$template = $this->renderTokens($template, array('page' => strtolower($config['pageid'])), $config, true);
+		}
 
 		$template = $this->renderAssets($template, array(), $config);
 
@@ -596,6 +599,8 @@ class brdi_Portal extends brdi
 			}
 			else
 			{
+				var_dump($content);
+				trigger_error("ERROR");
 				throw new brdi_Exception("Content set as type other than array");
 			}
 		}
