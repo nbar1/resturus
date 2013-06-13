@@ -11,7 +11,7 @@ RewriteRule .*\.git.* - [L,R=404]
 RewriteRule ^(application)/.* - [L,R=404]
 
 # Custom favicon
-RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png 
+RewriteRule ^(favicon\.ico)$ /brdi/clients/%{HTTP_HOST}/assets/images/global/favicon.png
 
 # Front controller access
 RewriteCond %{REQUEST_FILENAME} !-f
