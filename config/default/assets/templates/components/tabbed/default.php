@@ -2,6 +2,8 @@
 !{loop://tabs/}
 	<li!{if://tabs/[*]/active/} class="active"!{endif://tabs/[*]/active/}>
 		<a data-toggle="tab" href="#tabbed_!{loopvar://tabs/[*]/x/}">!{loopvar://tabs/[*]/title/}</a>
+		
+		<span class="tab_helper"></span>
 	</li>
 !{endloop://tabs/}
 </ul>

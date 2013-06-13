@@ -1,8 +1,15 @@
+.nav.nav-tabs {
+	border-bottom: none;
+	margin-bottom: 22px;
+}
 .tab-content {
-	background: rgba(246, 246, 246, 1);
+	background: #eee;
 	border: 1px solid #ddd;
 	margin-top: -21px;
 	padding: 30px;
+	-moz-box-shadow: 0px 1px 5px 0px #4a4a4a;
+	-webkit-box-shadow: 0px 1px 5px 0px #4a4a4a;
+	box-shadow: 0px 1px 5px 0px #4a4a4a;
 }
 .tab-content #hurricanepreparedness li {
 	padding: 10px 0;
@@ -12,11 +19,27 @@
 	font-weight: bold;
 	padding-bottom: 10px;
 }
-.component_brdi_Portal_Component_Tabbed > div > ul > li > a {
+.component_brdi_Portal_Component_Tabbed > div > ul > li > a,
+.component_brdi_Portal_Component_Tabbed > div > ul > li > a:hover {
 	background: rgba(246, 246, 246, 0.4);
 }
-.component_brdi_Portal_Component_Tabbed > div > ul > li.active > a {
-	background: rgba(246, 246, 246, 1);
+.component_brdi_Portal_Component_Tabbed > div > ul > li.active {
+	height: 38px;
+	overflow: visible;
+	position: relative;
+}
+.component_brdi_Portal_Component_Tabbed > div > ul > li.active > a,
+.component_brdi_Portal_Component_Tabbed > div > ul > li.active > a:hover {
+	background: #eee;
+	-moz-box-shadow: 0px 1px 5px 0px #4a4a4a;
+	-webkit-box-shadow: 0px 1px 5px 0px #4a4a4a;
+	box-shadow: 0px 1px 5px 0px #4a4a4a;
+}
+.active > .tab_helper {
+	background: #eee;
+	height: 8px;
+	position: absolute;
+	width: 100%;
 }
 
 /* PHONE */
