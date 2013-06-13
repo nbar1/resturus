@@ -88,6 +88,9 @@ a:hover {
 #content .component_bare {
 	margin-top: 20px;
 }
+#content .component_bare.visible-phone {
+	margin-top: 0;
+}
 .component .component {
 	margin-top: 0;
 }

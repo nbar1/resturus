@@ -1,4 +1,13 @@
-<div id="map_container">
+<div class="visible-phone">
+	<h1>Contact Us</h1>
+	<h3 class="contact_title ct_phone">Phone</h3>
+	<h3 class="phonenumber">!{token://location/contact_phone/}</h3>
+	<br />
+	<h3 class="contact_title">Mailing Address</h3>
+	<h3>!{token://location/contact_street/}</h3>
+	<h3>!{token://location/contact_city/}, !{token://location/contact_state/} !{token://location/contact_zip/}</h3>
+</div>
+<div id="map_container" class="hidden-phone">
 	<div id="map-canvas" class="hidden-phone"></div>
 	!{if://show_location_over_map/}
 		<div id="map_location_overlay">

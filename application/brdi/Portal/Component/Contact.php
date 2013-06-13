@@ -81,5 +81,11 @@ class brdi_Portal_Component_Contact extends brdi_Portal_Component
 			return false;
 		}
 	}
+	
+	public function getUrlEncodedAddress()
+	{
+		$location = $this->getLocation();
+		return urlencode($location['contact_street']." ".$location['contact_city']." ".$location['contact_state']." ".$location['contact_zip']);
+	}
 }
 ?>
