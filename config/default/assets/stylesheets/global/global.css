@@ -91,6 +91,9 @@ a:hover {
 #content .component_bare.visible-phone {
 	margin-top: 0;
 }
+#content .component_bare.visible-phone .comp_body {
+	padding: 10px 0;
+}
 .component .component {
 	margin-top: 0;
 }
@@ -154,14 +157,12 @@ a:hover {
 		font-size: 2em;
 	}
 	#content {
-		margin: 15px 0 0;
+		margin: 0 0 15px;
 	}
 	#content .title_bar {
 		padding: 15px;
 	}
 }
-
-
 
 /* Height Sets */
 .height_100 {
