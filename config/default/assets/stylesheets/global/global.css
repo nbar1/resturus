@@ -158,6 +158,7 @@ a:hover {
 	}
 	#content {
 		margin: 0 0 15px;
+		padding: 2px 0 0;
 	}
 	#content .title_bar {
 		padding: 15px;
