@@ -38,7 +38,6 @@ class brdi_Portal_Component_ImageSlider extends brdi_Portal_Component
 		{
 			$params['images'] = $this->getImagesFromCategory($params['image_category']);
 		}
-		
 		$content = array();
 		$x=1;
 		foreach($params['images'] as $image)
