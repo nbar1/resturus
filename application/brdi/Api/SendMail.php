@@ -6,7 +6,7 @@ class brdi_Api_SendMail extends brdi_Api
 	private $mail_subject;
 	private $mail_body;
 	private $mail_wrapper;
-	
+
 	function __construct($mail_to, $mail_from, $mail_subject, $mail_body, $mail_wrapper = false)
 	{
 		$this->mail_to = $mail_to;
@@ -23,19 +23,16 @@ class brdi_Api_SendMail extends brdi_Api
 		// check if send address validates
 		if($this->validateEmail($this->mail_to) === false) return false;
 
-		
+
 		$this->mail_body = $this->wrapBody($this->mail_body);
 
-		
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 		$headers .= 'From: ' . $this->mail_from . "\r\n";
-		
+
 		$body = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>'.$this->mail_subject.'</title></head><body>';
 		$body .= $this->mail_body;
 		$body .= '</body></html>';
-		
-		var_dump(mail($this->mail_to, $this->mail_subject, $this->mail_body, $headers));
 
 		if(mail($this->mail_to, $this->mail_subject, $this->mail_body, $headers))
 		{
@@ -43,28 +40,28 @@ class brdi_Api_SendMail extends brdi_Api
 		}
 		return false;
 	}
-	
+
 	private function wrapBody($mail_body)
-	{	
+	{
 		if($this->mail_wrapper !== false)
 		{
 			$template = $this->getTemplate($this->mail_wrapper);
 			if($template !== false)
 			{
-				$template = str_replace("!{replace://email_body/}", $mail_body, $template);
+				$template = str_replace("!{content://email_body/}", $mail_body, $template);
 				return $template;
 			}
 		}
 		return $mail_body;
 	}
-	
+
 	private function validateEmail($email)
 	{
-		// First, we check that there's one @ symbol, 
+		// First, we check that there's one @ symbol,
 		// and that the lengths are right.
 		if (!ereg("^[^@]{1,64}@[^@]{1,255}$", $email))
 		{
-		// Email invalid because wrong number of characters 
+		// Email invalid because wrong number of characters
 		// in one section or wrong number of @ symbols.
 			return false;
 		}
@@ -78,7 +75,7 @@ class brdi_Api_SendMail extends brdi_Api
 				return false;
 			}
 		}
-		// Check if domain is IP. If not, 
+		// Check if domain is IP. If not,
 		// it should be valid domain name
 		if (!ereg("^\[?[0-9\.]+\]?$", $email_array[1]))
 		{
