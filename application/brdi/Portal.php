@@ -11,40 +11,6 @@ class brdi_Portal extends brdi
 	public $stylesheets;
 
 	/**
-	 * getFileOverrides
-	 *
-	 * Checks for a client level override on config files
-	 *
-	 * @param String $path Path of config file
-	 * @return String file path
-	 */
-	public function getConfigOverride($path)
-	{
-		if(strpos($path, "http") === 0) return $path;
-		if(strstr($path, "cmsimages/") !== false) return $path;
-		try
-		{
-			if(!$path) return false;
-			// check for client level override
-			if(file_exists(CONFIG.$this->getClientToken()."/".$path))
-			{
-				return CONFIG.$this->getClientToken()."/".$path;
-			}
-			// check for default file
-			elseif(file_exists(CONFIG."default/".$path))
-			{
-				return CONFIG."default/".$path;
-			}
-		}
-		catch (brdi_Exception $e)
-		{
-			echo $path;
-			Throw new brdi_Exception(301, "", $this);
-			return false;
-		}
-	}
-
-	/**
 	 * getTokens
 	 *
 	 * @param String $template Template file to search

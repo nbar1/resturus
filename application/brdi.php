@@ -207,5 +207,72 @@ class brdi
 			return false;
 		}
 	}
+	
+	/**
+	 * getFileOverrides
+	 *
+	 * Checks for a client level override on config files
+	 *
+	 * @param String $path Path of config file
+	 * @return String file path
+	 */
+	public function getConfigOverride($path)
+	{
+		if(strpos($path, "http") === 0) return $path;
+		if(strstr($path, "cmsimages/") !== false) return $path;
+		try
+		{
+			if(!$path) return false;
+			// check for client level override
+			if(file_exists(CONFIG.$this->getClientToken()."/".$path))
+			{
+				return CONFIG.$this->getClientToken()."/".$path;
+			}
+			// check for default file
+			elseif(file_exists(CONFIG."default/".$path))
+			{
+				return CONFIG."default/".$path;
+			}
+		}
+		catch (brdi_Exception $e)
+		{
+			echo $path;
+			Throw new brdi_Exception(301, "", $this);
+			return false;
+		}
+	}
+	
+	public function getTemplate($template)
+	{
+		try
+		{
+			// If passed a uri, get the template
+			if($this->isUri($template))
+			{
+				$uri = $this->parseUri($template);
+				$template_path = strtolower($uri['type']."s/".$uri['path'].".php");
+				$template = $this->getConfigOverride("assets/".$template_path);
+				$template = @file_get_contents($template);
+
+				if($template === false)
+				{
+					throw new brdi_Exception("Template uri pointed to invalid template");
+				}
+			}
+			if($template)
+			{
+				return $template;
+			}
+			else
+			{
+				throw new brdi_Exception("Template returned as false");
+			}
+		}
+		catch(brdi_Exception $e)
+		{
+			$e->logError();
+			return false;
+		}
+	}
 }
 ?>
